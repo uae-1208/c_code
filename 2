@@ -1,0 +1,824 @@
+2.
+#include<stdio.h>
+int main()
+{
+int hour1,hour2,minute1,minute2;
+	printf("请输入两个时间：\n");
+	scanf ("%d %d %d %d",&hour1,&minute1,&hour2,&minute2);
+	int hour=(hour1*60+minute1-hour2*60-minute2)/60;
+	int minute=(hour1*60+minute1-hour2*60-minute2)%60;
+	if(minute<0)
+	{
+		minute=60+minute;
+		hour--;
+	}
+	printf("时间差为%d时%d分",hour,minute);
+	return 0;
+}
+
+ 
+3.
+#include<stdio.h>
+int main()
+{
+	int a,b,c;
+	scanf("%d %d",&a,&b);
+    c=a;
+	a=b;
+	b=c;
+	printf("a=%d,b=%d",a,b);
+	return 0;
+}
+
+ 
+4.
+#include<stdio.h>
+int main()
+{
+	int a,b,c;
+	printf("输入现在时间（三或四位数字）：\n");
+	scanf("%d",&a);
+	printf("输入流失时间（分钟）：\n");
+	scanf("%d",&b);
+	c=a/100*60+a%100+b;
+	int d=c/60*100+c%60;
+	printf("现在时间为：%d\n",d);
+	return 0;
+}
+ 
+ 
+5.
+#include<stdio.h>
+int main()
+{
+	int a;
+	printf("请输入一个三位正整数（如123）：\n");
+	scanf("%d",&a);
+	int b=a/100,c=(a-100*b)/10,d=a-100*b-10*c,f=100*d+10*c+b;
+	printf("逆序的三位数为：%d",f);
+	return 0;
+}
+ 
+ 
+ 
+6、
+#include<stdio.h>
+int main()
+{
+	int height;
+	printf("请输入身高（cm）：\n");
+	scanf("%d",&height);
+	int foot=height/30.48;
+	int inch=(height/30.48-foot)*12;
+	printf("身高为%d英尺%d英寸",foot,inch);
+	return 0;
+}
+
+
+7、#include<stdio.h>
+int main()
+{
+	int a;
+    printf("请输入数据：");
+    scanf("%d",&a);
+    int b=a/16;
+    int c=a-16*b;
+    printf("转换后的数字为：%d\n",b*10+c);=
+	return 0;
+}
+
+
+
+8、#include<stdio.h>
+int main()
+{
+    int price=0,money=0;
+    printf("请输入应付金额：");
+    scanf("%d",&price);
+    printf("请输入实付金额：");
+	scanf("%d",&money);
+	int change=money-price;
+	if (change<0)
+	{
+		printf("实付金额不足，请再支付%d元",-change);
+	 } 
+	 if(change>=0)
+	 {
+	 printf("找零%d元",change);
+	 } 
+	return 0;
+}
+
+
+ 
+9、#include<stdio.h>
+int main()
+{
+    int score100; 
+    printf("请输入百分制成绩：");
+	scanf("%d",&score100);
+	if(90<=score100)
+		printf("您的五分制成绩为：A");
+	else if(80<=score100&score100<90)
+		printf("您的五分制成绩为：B");
+	else if(70<=score100)
+		printf("您的五分制成绩为：C");
+	else if(60<=score100)
+		printf("您的五分制成绩为：D");
+	else
+		printf("您的五分制成绩为：E");
+	return 0;
+}
+
+
+10、#include<stdio.h>
+int main()
+{
+    int score100; 
+    printf("请输入百分制成绩：");
+	scanf("%d",&score100);
+	int a=score100/10;
+	switch(a)
+	{
+		case 10:
+		case 9:
+			printf("您的五分制成绩为：A"); 
+			break;
+		case 8:
+			printf("您的五分制成绩为：B");
+			break;
+		case 7:
+			printf("您的五分制成绩为：C");
+			break;
+		case 6:
+			printf("您的五分制成绩为：D"); 
+			break;
+		default:
+			printf("您的五分制成绩为：E");
+	}
+	return 0;
+}
+
+
+
+11、#include<stdio.h>
+int main()
+{
+    int a,n=1;
+	printf("请任意输入一个正整数：");
+	scanf("%d",&a);
+	while(a/10>0)
+	{
+		a/=10;
+		n++;
+	 } 
+	 printf("该正整数的位数为%d",n);
+	return 0;
+}
+
+
+
+12、#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+int main()
+{
+    srand(time(0));
+    int a=rand()%100+1;
+    int c=0,b=0;
+    printf("我已经想好了一个数字，快来猜猜吧！\n");
+    printf("和我说说你猜的数字：\n");
+    do
+    {
+    	scanf("%d",&b);
+    	c++;
+    	if(b>a){
+    		printf("你猜的数字太大了，再猜猜看！\n");
+		}else if(b<a){
+			printf("你猜的数字太小了，再猜猜看！\n");
+		}
+    	
+	}while(b!=a);
+	printf("太棒了!答案就是%d。你只用了%d次就猜对了！",a,c);
+	return 0;
+}
+
+
+
+13、#include <stdio.h>
+int main()
+{
+	int x;
+	printf("请输入一个整数（在0到30之间）:");
+	scanf("%d",&x); 
+	if(1<=x&x<=10)
+	printf("......");
+	else if(11<=x&x<=20)
+	printf("《》");
+	else if(21<=x&x<=30)
+	printf("w..w");
+	
+	return 0;
+ } 
+ 
+ 
+
+14、#include <stdio.h>
+int main()
+{
+	int x, y;
+	printf("输入x= ");
+	scanf_s("%d", &x);
+	printf("输入y= ");
+	scanf_s("%d", &y);
+	if (x > y)
+		printf("x>y");
+	else if (x < y)
+		printf("x<y");
+	else
+		printf("x=y");
+	return 0;
+}
+
+
+
+15、#include <stdio.h>
+int main()
+{
+	int x=0, y=0;
+	printf("输入x= ");
+	scanf_s("%d", &x);
+	
+	if (x < 0)
+		y = 2 * x - 1; 
+	else if (x == 0)
+		y = 0;
+	else if (x>0)
+		y = 3 * x;
+	printf("y= %d", y);
+	return 0;
+}	
+
+
+
+16、#include<stdio.h>
+int main()
+{	
+	int number,n,count=0;
+	printf("请输入待检测数字:");
+	scanf("%d",&number);
+	for(n=2;n<number;n++)
+	{
+		if(number % n==0)	
+			count++;
+	}
+	if(count==0)
+		printf( "该数字为素数");
+	else
+		printf( "该数字不为素数");
+	return 0;
+}
+
+
+
+17. #include <stdio.h>
+void jolly(void);     
+void deny(void);     //引入两个其他函数
+
+int main(void)
+{
+	jolly();
+	jolly();
+	jolly();
+	deny();
+return 0;
+ }
+ 
+ void jolly (void)    //定义两个函数 
+ {
+ 	printf("For he's a jolly good fellow!\n");
+ }
+ void deny(void) 
+ {
+ 	printf("Which nobody can deny!");
+ }
+
+
+
+
+18. #include <stdio.h>
+void jolly(void);     
+
+int main(void)
+{
+	jolly();
+	jolly();
+	jolly();
+	printf("\n");
+	jolly();
+	jolly();
+	printf("\n");
+	jolly();
+return 0;
+ }
+ 
+ void jolly (void)    
+ {
+ 	printf("Smile!");
+ }
+
+
+
+19. #include<stdio.h>
+int main(void)
+{
+	char ascii;
+	scanf("%d",&ascii);
+	printf("%c",ascii);
+	printf("\aStartled shouted,\n");
+	printf("\"BY taht!\"");
+	return 0;
+ }
+ 
+ 
+ 20.#include<stdio.h>
+ int main(void)
+{
+  float value;
+	printf("Enter a floating-point value:");
+	scanf("%f",&value);
+	printf("flxed-pointed notation: %f\n",value);
+	printf("exponential notation: %.5e\n",value);
+	printf("p notation: %a",value);
+ }
+ 
+ 
+ 
+ 21.#include<stdio.h>
+ int main(void)
+{
+  float age,second;
+	printf("Tell me your age:");
+	scanf("%f",&age);
+	second=age*3.156e7;
+	printf("Then your second is: %e",second);
+ }
+ 
+ 
+ 
+ 22.#include<stdio.h>
+ int main()
+{
+	double num;
+	double mass;
+	scanf("%lf",&mass);
+	num=mass/3e-23;
+	printf("%f",num);
+	return 0;
+}
+
+
+
+
+
+23. #include<stdio.h>
+#include<string.h>
+#define name "James Carmelon" 
+int main(void)
+{
+	int a;
+	printf("The name is %0*s",strlen(name)+3,name);
+ }
+ 
+ 
+ 
+ 24.#include<stdio.h>
+ int main(void)
+ {
+	float f;
+	printf("Please enter a float:");
+	scanf("%f",&f);
+ }
+ 
+ 
+ 
+25.#include<stdio.h>
+ int main(void)
+ {
+	float speed,size,time;
+	printf("The size(MB) of the file is:");
+	scanf("%f",&size);
+	printf("The downloading speed(Mb/s) is:");
+	scanf("%f",&speed);
+	printf("At %.2f megabits per second, a file of %.1f megabytes downloads in %.2f seconds",
+	speed,size,size*8/speed);
+  }
+  
+  
+26.#include<stdio.h>
+ int main(void)
+ {
+	char first_name[20],last_name[20];
+	int a,b;
+	printf("Please enter your first name:");
+	scanf("%s",first_name);
+	printf("Please enter your last name:");
+	scanf("%s",last_name);
+	a=strlen(first_name);
+	b=strlen(last_name);
+	printf("%s %s\n",first_name,last_name);
+	printf("%*d %*d\n",a,a,b,b);
+	printf("%s %s\n",first_name,last_name);
+	printf("%-*d %-*d\n",a,a,b,b);
+ }
+
+
+
+
+26.#include<stdio.h>
+void print(double number);
+int main(void)
+{
+	int number,a,b;
+	printf("Please enter a number:");
+	scanf("%d",&number);
+	a=number;
+	while(a<number+11)
+	{
+		printf(" %d",a);
+		a++;
+	}
+ }
+ 
+ 
+ 
+27.#include<stdio.h>
+ int main(void)
+{
+	int week,day,time;
+	printf("Enter days:");
+	scanf("%d",&time);
+	while(time>0)
+	{
+		week = time / 7;
+		day = time % 7;
+		printf("%d days are %d weeks,%d days\n",time,week,day);
+		printf("Enter another time:\n");
+		scanf("%d",&time);
+	}
+}
+
+
+
+
+28.#include<stdio.h>
+ int main(void)
+{
+  int day;
+	int money=0;
+	int count_day=1;
+	printf("Please enter the number of day:");
+	scanf("%d",&day);
+	while(count_day<day+1)
+	{
+		money=money+count_day*count_day;	
+		count_day++;
+	}
+	printf("The money you earn is $%d.",money);
+ }
+ 
+ 
+ 
+ 
+ 
+29. #include <stdio.h>
+#include <string.h>
+int main(void)
+{
+	int i;
+	char ch[26];
+	ch[0]='a';
+	for(i=0;i<26;i++)
+	{
+		ch[i]='a'+i;
+		printf("ch[%d] is '%c'\n",i,ch[i]);
+	}
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+30.#include<stdio.h>
+int main(void)
+{
+	int i,n;
+	char ch;
+	for(i=1;i<7;i++)
+	{
+		for(n=1,ch='F';n<=i;n++)
+			printf("%c",ch-n+1);
+		printf("\n");
+	}
+}
+
+
+
+
+31.#include<stdio.h>
+int main(void)
+{
+	char ch;
+	int i,n,m;
+	m=1;
+	for(i=1;i<7;i++)
+	{
+		ch='A'+m-1;
+		for(n=1;n<=i;n++)
+		{	
+			printf("%c",ch,n);
+			ch=ch+1;
+		} 
+		printf("\n");
+		m=m+i;
+	}
+ }
+ 
+ 
+ 
+ 
+32.#include<stdio.h>
+int main(void)
+{
+	int uplim,dolim;
+	int i;
+	printf("Please enter the uplimit and the downlimit:");
+	scanf("%d%d",&uplim,&dolim);
+	for(i=dolim;i<=uplim;i++)
+		printf("%5d%10d%10d\n",i,i*i,i*i*i);
+}
+
+
+
+
+
+
+33.#include<stdio.h>
+int main(void)
+{
+  char word[20];
+	char inverse_word[20];
+	int length,i;
+	printf("Please enter a word:");
+	scanf("%s",word);
+	length=strlen(word);
+	for(i=0;i<length;i++)
+		inverse_word[length-i-1]=word[i];
+	printf("%s",inverse_word);
+}
+
+
+
+
+34.#include<stdio.h>
+int main(void)
+{
+  int lower,upper,sum,i;
+	printf("Enter lower and upper integer limits:");
+	scanf("%d %d",&lower,&upper);
+	sum=0;
+	while(lower<upper)
+	{
+		for(i=lower;lower<=upper;i++)
+			sum=sum+i*i;
+		printf("The sum of the squares from %d to %d is %d\n",lower*lower,upper*upper,sum);
+		printf("Enter next set of limits:");
+		scanf("%d%d",&lower,&upper);
+	}
+	printf("Done!");
+}
+
+
+
+35.#include<stdio.h>
+int main(void)
+{
+  int integer[8];
+	int rev_in[8];
+	int i;
+	printf("Enter 8 integers:");
+	for(i=0;i<8;i++)
+		scanf("%d",&integer[i]);
+	for(i=0;i<8;i++)
+	{
+		rev_in[i]=integer[8-i-1];
+		printf("%5d",rev_in[i]);
+	}
+}  
+ 
+ 
+ 
+ 
+ 
+36.#include<stdio.h>
+int main(void)
+{
+  int times,i;
+	float num1,num2;
+	do
+	{
+		num1=num2=0.0;
+		printf("请输入运行次数（输入0退出）：");
+		scanf("%d",&times);
+		for(i=1;i<=times;i++)
+			num1=num1+1.0/i;
+		printf("num1=%f\n",num1);
+	}while(times!=0);
+}
+
+
+
+
+
+
+37.#include<stdio.h>
+int main(void)
+{
+  int integer[8];
+	int i,num=2;
+	for(i=0;i<8;i++)
+	{
+		integer[i]=num;
+		num*=2;
+	}
+	i=0;
+	do
+	{
+		printf("integer[%d] is %d\n",i,integer[i]);
+		i+=1;
+	}while(i<8);
+}
+
+
+
+
+
+38.#include<stdio.h>
+int main(void)
+{
+  int num[8],sum[8];
+	int i,sumk=0;
+	for(i=0;i<8;i++)
+	{
+		printf("Enter a number for num[%d]:",i);
+		scanf("%d",&num[i]);
+		sumk=sumk+num[i];
+		sum[i]=sumk;
+	}
+	for(i=0;i<8;i++)	
+		printf("%5d",num[i]);
+	printf("\n");
+	for(i=0;i<8;i++)
+		printf("%5d",sum[i]);
+}
+
+
+
+
+
+
+39.#include<stdio.h>
+int main(void)
+{
+  float mon1=100.0;
+	float mon2=100.0;
+	int i=2;
+  mon1+=100*0.1;
+	mon2*=1+0.05;	
+	while(mon1>mon2)
+	{
+		mon1+=100*0.1;
+		mon2*=1+0.05;
+		i++;
+	}
+	printf("In the %dth year,the money of de is %f > the money of da is %f",i,mon2,mon1);
+}
+
+
+
+40.#include<stdio.h>
+int main(void)
+{
+  float mon=100.0;
+	int year=2;
+	while(mon>0)
+	{
+		mon=mon*(1+0.08)-10;
+		printf("%f  ",mon);
+		printf("%d\n",year);
+		year++;
+	}
+	printf("%d",year);
+  
+  
+  
+40.#include<stdio.h>
+int main(void)
+{
+	const int dunbar=150;
+	int fri_num=5,week_num;
+	printf("The number of week   The number of friend\n");
+	for(week_num=1;fri_num<dunbar;week_num++)
+	{
+		fri_num=(fri_num-week_num)*2;
+		printf("%-21d%d\n",week_num,fri_num);
+	}
+	printf("Done!");
+ }
+
+
+
+
+
+
+41. #include <stdio.h>
+#include <string.h>
+int main()
+{
+	char letter;
+ 	int row;         //控制行 
+	int i;           //控制前半部分空格 
+	int n;           //控制升序打印 
+	int m;           //控制降序打印 
+	int a;           //控制行数 
+	printf("Enter a center letter(A to Z):");
+	scanf("%c",&letter);
+	a=(int)(letter-'A')+1;
+ 	for(row=1;row<=a;row++)
+ 	{
+ 		for(i=a-row+1;i>0;i--)
+ 			printf(" ");
+		 for(n=1;n<=row;n++)
+		 	printf("%c",'A'+n-1);
+		 for(m=row-1;m>0;m--)
+		 	printf("%c",'A'+m-1);
+		printf("\n");
+	 }
+Return 0;
+}
+
+
+
+
+42.#include<stdio.h>
+	#include<string.h>
+	Int main()
+{
+	char ch[254];
+	 char m;
+	 int i=0,length;
+	 printf("Enter anything:");
+	 scanf("%c",&m);
+	 while(m!='\n')
+	 {
+	 	ch[i]=m;
+	 	i++;
+	 	scanf("%c",&m);
+	 }
+	 length=strlen(ch);
+	 for(i=length;i>=0;i--)
+	 printf("%c",ch[i]);
+	 return 0;
+}
+
+
+
+
+
+43. #include <stdio.h>
+#include <ctype.h>
+#define stop '@'
+int main()
+{	
+	int line=0;             //计行数 
+	int word=0;			    //计单词数 
+	int chars=0;			//计非空字符数 
+	char c;					//读入字符 
+	char prec=' ';			//存储上一个字符
+	printf("Enter text to be analyzed(@ to end):");
+	while((c=getchar())!=stop)
+	{
+		chars++;
+		if(c=='\n')
+			line++;
+		if(isspace(prec) && !isspace(c))
+			word++;
+		prec=c;			
+	}
+	if(prec!='\n')
+		line++;
+	printf("charasters=%d,words=%d,lines=%d",chars,word,line);
+	return 0;
+}
