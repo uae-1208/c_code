@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <ctype.h>
+int main(void)
+{
+	char ch;
+	printf("Give me a letter of the alphabet,and I will give");
+	printf("an animal name\nbeginning with that letter.\n");
+	printf("Enter a letter(# to quit):");
+	while((ch = getchar()) != '#')
+	{
+		if(ch == '\n')
+			continue;		//防止首个字符是换行符 
+		if (islower(ch))
+			switch(ch)
+			{
+				case 'a':
+					printf("argali");
+					break;
+				case 'b':
+					printf("babirusa");
+					break;
+				case 'c':
+					printf("coati");
+					break;
+				case 'd':
+					printf("desman");
+					break;
+				case 'e':
+					printf("echidna");
+					break;
+				default:
+				 	printf("That's a stumper!");	
+			}
+		else
+		 	printf("Lowercase letters only!");
+		while(getchar() != '\n')
+		continue; 							//continue可省略 
+		printf("\nPlease enter another letter or a #.");
+		
+	}
+	printf("Bye!\n");
+}
