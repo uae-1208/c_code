@@ -1,0 +1,51 @@
+T1
+#include<stdio.h>
+#include<ctype.h>
+#define stop '#'
+int main(void)
+{
+	int n_space=0;
+	int n_row=0;
+	int n_other=0;
+	char c;
+	printf("Enter text to be analyzed(# to end):");
+	while((c=getchar())!=stop)
+	{
+		if(c=='\n')
+			n_row++;
+		else if(isspace(c))
+			n_space++;
+		else 
+			n_other++;
+	}
+	printf("space=%d,row=%d,other=%d",n_space,n_row,n_other);
+  
+  
+  T2
+  #include<stdio.h>
+  int main(void)
+  {
+    int eight=0;
+	  int ascii[8];
+	  int i=0,n=0;
+	  char c;
+	  printf("Enter text to be analyzed(# to end):");
+	  while((c=getchar())!=stop)
+	  {
+		  ascii[i]=c;
+		  printf("%-5c",c);
+		  eight++;
+		  i++;
+		  if((eight/8)==1)
+		  {
+			  printf("\n");
+			  for(n=0;n<8;n++)
+				printf("%-5d",ascii[n]);
+			  eight=0;
+			  i=0;
+			  printf("\n");
+		  }
+	  }
+}
+
+
