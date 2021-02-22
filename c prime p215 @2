@@ -1,0 +1,93 @@
+T3
+#include <stdio.h>
+#include <ctype.h>
+int main(void)
+{
+	int even_sum=0;
+	int even_num=0;
+	int odd_sum=0;
+	int odd_num=0;
+	int i;
+	printf("Enter a series of numbers(0 to quit):");
+	scanf("%d",&i);
+	while(i != 0)
+	{
+		if (i%2 == 0)
+		{
+		 	even_num ++;
+		 	even_sum =even_sum+i;
+		} 
+		else
+		{
+			odd_num ++;
+		 	odd_sum =odd_sum+i;
+		}
+		scanf("%d",&i);
+	}
+	
+	printf("The average of %d even numbers is %lf \n",even_num,(float)even_sum/even_num);
+	printf("The average of %d odd numbers is %lf \n",odd_num,(float)odd_sum/odd_num);
+}
+
+
+
+T4
+#include <stdio.h>
+#include <ctype.h>
+int main(void)
+{
+	int i;
+	char ch;
+	printf("Enter some type(# to quit):");
+	while((ch=getchar())!='#')
+	{
+		if (ch=='.')
+			{
+				ch='!';
+				i++;
+			}
+		else if(ch=='!')
+			{
+				ch='!';
+				i++;
+			putchar(ch);
+			}
+		putchar(ch);
+	}
+	printf("\n%d replacements",i);
+}
+
+
+T5
+#include <stdio.h>
+#include <ctype.h>
+int main(void)
+{
+	int i;
+	char ch;
+	printf("Enter some type(# to quit):");
+	while((ch=getchar())!='#')
+	{
+		switch(ch)
+		{
+			case '.':
+				ch='!';
+				i++;
+				break;
+			case '!': 
+				ch='!';
+				i++;
+				putchar(ch);
+				break;
+			default:
+				break;
+		}
+		putchar(ch);
+		if(ch=='\n')
+			printf("%d replacements",i);	
+	}
+}
+
+
+
+
