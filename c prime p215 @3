@@ -1,0 +1,99 @@
+T8
+#include <stdio.h>
+#include <ctype.h>
+#define rate1 8.75
+#define rate2 9.33
+#define rate3 10.00
+#define rate4 11.20
+#define break1 300
+#define break2 450
+#define tax1 0.15
+#define tax2 0.20
+#define tax3 0.25
+#define basic1 break1*(1-tax1)
+#define basic2 basic1+(break2-break1)*(1-tax2)
+#define overtime 40
+int main(void)
+{
+	float rate;
+	int hour;
+	float money;
+	float money2;
+	int i;                                    //作为选择选项 
+	printf("*****************************************************************\n");
+	printf("Enter the number corresponding to the desired pay rate or action:\n");
+	printf("1)$8.75/hr                              2)$9.33/hr\n");
+	printf("3)$10.00/hr                             3)$11.20/hr\n");
+	printf("quit\n");
+	printf("*****************************************************************\n");
+	if(scanf("%d",&i)==0)
+		printf("Please enter a right alternative");
+	else if(!(0<i&&i<6))
+		printf("Please enter a right alternative");
+	else if(i==5)
+		printf("Done!");
+	else
+		{
+			switch(i)
+			{
+				case 1:
+					rate=rate1;
+					break;
+				case 2:
+					rate=rate2;
+					break;
+				case 3:
+					rate=rate3;
+					break;
+				default:
+					rate=rate4;
+					break;
+			}
+			printf("Enter the working time:");
+			scanf("%d",&hour);
+			if(hour<=overtime)
+				money=hour*rate;
+			else 
+				money=overtime*rate+1.5*(hour-overtime)*rate;
+			if(money<=break1)
+				money2=money*(1-tax1);
+			else if(money<=break2)
+				money2=basic1+(money-break1)*(1-tax2);
+			else
+				money2=basic2+(money-break2)*(1-tax3);
+			printf("The money before tax is %.2lf\n",money);
+			printf("The money after tax is %.2lf\n",money2);
+			printf("The tax is %.2lf",money-money2);
+		}
+}
+
+
+
+T9
+#include<stdio.h>
+int main(void)
+{
+	int num;						//存储目标整数
+	int i;							//用于小于目标整数的循环 
+	int n;							//用于判断素数的循环 
+	int k=0; 							//记录素数个数
+	int z;							//判断是否为素数 
+	printf("Enter a integer more than 0: ");
+	scanf("%d",&num);
+	for(i=2;i<=num;i++)
+	{	
+		z=0;
+		for(n=2;n<i;n++)
+			if(i%n==0)
+				z=1;
+		if(!z)
+		{
+			k++;
+			printf("第%d个素数为%d\n",k,i);
+		}	
+	 } 
+	 if(!k)
+	 	printf("无素数。");
+	else
+		printf("共%d个小于等于%d的素数。",k,num);
+ }
