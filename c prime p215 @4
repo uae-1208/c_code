@@ -1,0 +1,154 @@
+T9
+#include<stdio.h>
+#define break1 17850
+#define break2 23900
+#define break3 29750
+#define break4 14875
+#define rate1 0.15
+#define rate2 0.28
+#define basic1 break1*rate1
+#define basic2 break2*rate1
+#define basic3 break3*rate1
+#define basic4 break4*rate1
+int main(void)
+{	
+	int i;							//作为选项 
+	int breakpoint;
+	int money;
+	float tax,basic;
+	printf("*********************************************************\n");
+	printf("类别                   	税金\n");
+	printf("1)单身			17850美金按15%%计，超出部分按28%%计\n");
+	printf("2)户主			23900美金按15%%计，超出部分按28%%计\n");
+	printf("3)已婚共有		29750美金按15%%计，超出部分按28%%计\n");
+	printf("4)已婚离异		14875美金按15%%计，超出部分按28%%计\n");
+	printf("5)退出\n"); 
+	printf("*********************************************************\n");
+	printf("请输入选项：");
+	/*while(scanf("%d",&i)!=1)
+	{
+		printf("请输入数字！");
+		scanf("%d",&i);
+	}*/
+	scanf("%d",&i);
+	while(!(1<=i&&i<=5))
+		{
+			printf("请输入正确的选项:"); 
+			scanf("%d",&i);
+		}
+	while(i!=5)
+	{
+		switch(i)
+		{
+			case 1:
+				breakpoint=break1;
+				basic=basic1;
+				break;	
+			case 2:
+				breakpoint=break2;
+				basic=basic2;
+				break;	
+			case 3:
+				breakpoint=break3;
+				basic=basic3;
+				break;	
+			default:
+				breakpoint=break4;
+				basic=basic4;
+				break;	
+		}
+		printf("请输入应纳税金额：");
+		scanf("%d",&money); 
+		if(money<=breakpoint)
+			tax=money*rate1;
+		else
+			tax=basic+(money-breakpoint)*rate2;
+		printf("在%d）类别下，%d的金额应缴纳%.2lf的税额。\n",i,money,tax);	
+		printf("请再次输入选项：");
+		scanf("%d",&i);					//
+		while(!(1<=i&&i<=5))
+		{
+			printf("请输入正确的选项:"); 
+			scanf("%d",&i);
+		} 								//
+	}
+}
+
+
+
+
+
+
+T10
+#include<stdio.h>
+#define price1 2.05							//洋蓟价格  			
+#define price2 1.15							//甜菜价格 
+#define price3 1.09							//胡萝卜价格 
+int main(void) 
+{
+	char begin;								//开始键 
+	char buy;								//存储采购字母 
+	char buy2='b';							//决定是否继续采购 
+	float a1=0.0;							//存储洋蓟重量 
+	float a2=0.0;							//存储甜菜重量 
+	float a3=0.0;							//存储胡萝卜重量 
+	float a=0.0;							//存储当前输入重量  
+	float price;
+	int fee;								//存储运费和包装费
+	float discost;							//存储折扣 
+	float A;								//存储总质量 
+	int k;
+	printf("************************************\n");
+	printf("洋蓟价格：$2.05/磅       采购字母：a\n");
+	printf("甜菜价格：$1.15/磅       采购字母：b\n");
+	printf("胡萝卜价格：$1.09/磅	 采购字母：c\n");
+	printf("************************************\n");
+	printf("按“b”开始采购，按其余键退出程序："); 
+	scanf("%c",&begin);
+	if(begin=='b')
+	{
+		scanf("%c",&begin);						//读取上次输入时输入的“\n” 
+		while(buy2=='b')						//buy2的初始值使进入循环 
+		{
+			k=1;
+			printf("请输入采购字母:");
+			scanf("%c",&buy);
+			switch(buy)
+				{
+					case 'a':
+						printf("请输入洋蓟磅数：");
+						scanf("%f",&a);
+						a1=a1+a;
+						break;
+					case 'b':
+						printf("请输入甜菜磅数：");
+						scanf("%f",&a);
+						a2=a2+a;
+						break;
+					case 'c':
+						printf("请输入胡萝卜磅数：");
+						scanf("%f",&a);
+						a3=a3+a;
+						break;
+					default:
+						printf("请输入正确的字母！");
+						k=0;
+						break; 
+				}
+			if(k)
+				printf("继续采购请按“b”，结算请按“q”:");
+			else
+				printf("\n请重新输入采购字母：");
+				scanf("%c",&begin);							//读取上次输入时输入的“\n”
+				scanf("%c",&buy2);
+				scanf("%c",&begin);							//读取上次输入时输入的“\n”
+				if(buy2=='q')								//按“q”结算 
+					break;
+				price=a1*price1+a2*price2+a3*price3;
+				printf("%f",price);
+			
+		}
+	}
+	else
+		printf("已退出！"); 
+}
