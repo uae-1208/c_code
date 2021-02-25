@@ -1,0 +1,75 @@
+#include<stdio.h> 
+#include<stdbool.h>
+#define MAX +10000000L
+#define MIN -10000000L
+long get_long(void);
+bool logic(long lower,long upper,long max,long min);
+long sum(long lower,long upper);
+int main(void)
+{
+	long up_limit;
+	long lo_limit;
+	long result;
+	printf("This program computes the sum of the squares of integers in a range.\n");
+	printf("The lower bound should not be less than -10000000 and the upper ");
+	printf("bound should not be more than 10000000.\n");
+	printf("Now enter the limits(enter 0 for both to quit):\n");
+	printf("Upper limit:");
+	up_limit=get_long();
+	printf("Lower limit:");
+	lo_limit=get_long();
+	while(lo_limit!=0||up_limit!=0)
+		{
+			if(logic(lo_limit,up_limit,MAX,MIN))
+				printf("Please reenter:\n");
+			else
+				result=sum(lo_limit,up_limit);	
+			printf("The sum of the squares of the integers from %ld to %ld is %ld.\n",lo_limit,up_limit,result);
+			printf("Enter the limits(enter 0 for both to quit):\n");
+			printf("Upper limit:");
+			up_limit=get_long();
+			printf("Lower limit:");
+			lo_limit=get_long();
+		}
+ } 
+ 
+long get_long(void)
+{
+	long num;
+	char ch;
+	while(scanf("%ld",&num)!=1)
+	{
+		while((ch=getchar())!='\n')
+			putchar(ch);
+		printf(" is not a integer.\nPlease reenter:");	
+	}
+	return num;
+}
+bool logic(long lower,long upper,long max,long min)
+{
+	bool logic=false;
+	if(lower<min)
+	{
+		printf("The lower limit entered(%ld) is less than %ld.\n",lower,min);
+		logic=true;
+	}
+	if(max<upper)
+	{
+		printf("The upper limit entered(%ld) is more than %ld.\n",upper,max);
+		logic=true;
+	}
+	if(!(lower<upper))
+	{
+		printf("The lower limit entered(%ld) is not smaller than the upper limit entered(%ld).\n",lower,upper);
+		logic=true;
+	}
+	return logic;
+}
+long sum(long lower,long upper)
+{
+	int i;
+	long answer=0;
+	for(i=lower;i<=upper;i++)
+		answer +=i*i;
+	return answer;
+}
