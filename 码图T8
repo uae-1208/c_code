@@ -1,0 +1,25 @@
+#include<stdio.h> 
+int main()
+{
+	int a[2];
+	int i=0;
+	scanf("%d,%d,%d",&a[0],&a[1],&a[2]);
+	while(i<3)
+	{
+		if(a[i]<=0)
+		{	
+			printf("error");
+			break;
+		}
+		if(i==2)
+		{
+			if(a[0]-a[1]<a[2]&&a[2]<a[0]+a[1])
+				printf("yes");
+			else
+				printf("no");
+			break;
+		}
+		i++;
+	}
+	return 0;
+ } 
