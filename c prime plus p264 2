@@ -1,0 +1,36 @@
+#include<stdio.h>								
+#include "hotel.h"
+int main(void)
+{
+	int hotel;
+	int night,i;
+	float price;
+	float cost;
+	while(hotel = get_hotel())
+	{
+		while(hotel <1 || hotel > 5)
+			hotel = right_choice();
+		if(hotel == 5)
+			break;
+		switch (hotel)
+		{
+			case 1:price = hotel1;
+				   break;
+			case 2:price = hotel2;
+				   break;
+			case 3:price = hotel3;
+				   break;
+			case 4:price = hotel4;
+				   break;
+		}
+		night = get_night();
+		for(i=1,cost=0;i<=night;i++)
+		{
+			cost += price;
+			price *= rate;
+		}
+		printf("The totel cost will be %$%.2f.\n\n",cost);	
+	}
+	printf("Bye!");
+ }
+
