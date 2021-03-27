@@ -1,0 +1,19 @@
+#include<stdio.h>          //倒序输出输入的数字   
+void integer(int n);
+int main(void)
+{
+	int a;
+	scanf("%d",&a);
+	integer(a);
+}
+void integer(int n)
+{
+	int a;
+	if(n>0)
+	{
+		a=n%10;
+		printf("%d",a);
+		integer(n/10);
+	}
+}
+
