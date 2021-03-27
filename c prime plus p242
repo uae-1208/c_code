@@ -1,0 +1,47 @@
+#include<stdio.h>						
+char get_right(void);
+int main(vold)
+{
+	int up_limit=100;
+	int lo_limit=0;
+	int num=50;
+	int i=1;
+	char ans;
+	int n=0;					                     //判断是否猜对 
+	printf("请想出一个数字让我来猜，并告诉我:\n");
+	printf("A.太大了    B.太小了    C.猜对咯\n");
+	printf("那个数字是%d吗\n",num);
+	while(!n)
+	{
+		ans=get_right();
+		switch (ans)
+		{
+			case 'A':up_limit=num;
+					 break;
+			case 'B':lo_limit=num;
+					 break;
+			default:n=1;
+					 break;
+		}
+		if(n)
+			break;
+		i++;
+		num=(up_limit+lo_limit)/2;
+		printf("那个数字是%d吗\n",num);
+	}
+	printf("哈哈，我猜了%d次就猜对啦!",i);
+}
+		
+char get_right(void)
+{
+	char ch;
+	while(!('A'<=(ch=getchar()) && ch<='C'))
+	{
+		while(getchar() != '\n')
+			continue;
+		printf("请按要求输入哦！："); 
+	} 
+	while(getchar() != '\n')
+			continue;
+	return ch;
+}
