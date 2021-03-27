@@ -1,0 +1,25 @@
+#include<stdio.h>						
+#include<string.h>
+#define sten1 "ABCDEFG"
+#define sten2 "Good night! Makabaka!"
+#define width 40
+void space(char ch, int num);
+int main(void)
+{	
+	char ch;
+	scanf("%c",&ch);
+	space(ch,width);
+	printf("\n");
+	space(' ',(40-strlen(sten1))/2);
+	printf("%s\n",sten1);
+	space(' ',(40-strlen(sten2))/2);
+	printf("%s\n",sten2);
+	space(ch,width);
+}
+
+void space(char ch, int num)
+{
+	int i;
+	for(i=1;i<=num;i++)
+		printf("%c",ch);
+}
