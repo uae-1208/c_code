@@ -1,0 +1,17 @@
+#include<stdio.h>					
+long fact(int n);
+int main(void)
+{
+	int num;
+	scanf("%d",&num);
+	printf("%ld",fact(num));
+}
+
+long fact(int n)
+{
+	long num=1;
+	if(n>0)
+		num = n * fact(n-1);
+	return num;
+}
+
