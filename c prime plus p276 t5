@@ -1,0 +1,16 @@
+#include<stdio.h>								
+void larger_of(int * m,int * n)
+{
+	int temp;
+	temp= (*m>*n ? *m : *n);
+	*m=*n=temp;
+}
+int main(void)
+{
+	int a=5,b=172;
+	printf("Originally a=%d and b=%d.\n",a,b);
+	larger_of(&a,&b);
+	printf("Now a=%d and b=%d.",a,b);
+}
+
+
