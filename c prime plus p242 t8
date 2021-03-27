@@ -1,0 +1,108 @@
+#include<stdio.h>					
+void add(void);
+void subtract(void);
+void multiply(void);
+void divide(void);
+float get_num(void);
+char get_first(void);
+char get_right(void);
+int main(void)
+{	
+	char ch;
+	float num;
+	printf("Enter the operation of your choice:\n");
+	printf("a.add                   s.subtract\n");
+	printf("m.multiply	        d.divide\n");
+	printf("q.quit\n");
+	ch=get_right();
+	switch(ch)
+	{
+		case 'a':add();
+				 break;
+		case 's':subtract();
+				 break;
+		case 'm':multiply();
+				 break;
+		case 'd':divide();
+				 break;
+		case 'q':break;		
+	}
+}
+
+float get_num(void)
+{
+	float num;
+	while(scanf("%f",&num) != 1)
+	{
+		scanf("%*s");
+		printf("Enter a number such as 2："); 
+	}
+	return num;
+}
+
+void add(void)
+{
+	float num,a,b;
+	printf("Enter first number:");
+	a=get_num();
+	printf("Enter second number:");
+	b=get_num();
+	num=a+b;
+	printf("%.2f+%.2f=%.2f",a,b,num);
+}
+
+void subtract(void)
+{
+	float num,a,b;
+	printf("Enter first number:");
+	a=get_num();
+	printf("Enter second number:");
+	b=get_num();
+	num=a-b;
+	printf("%.2f-%.2f=%.2f",a,b,num);
+}
+
+void multiply(void)
+{
+	float num,a,b;
+	printf("Enter first number:");
+	a=get_num();
+	printf("Enter second number:");
+	b=get_num();
+	num=a*b;
+	printf("%.2f*%.2f=%.2f",a,b,num);
+}
+
+void divide(void)
+{
+	float num,a,b;
+	printf("Enter first number:");
+	a=get_num();
+	printf("Enter second number:");
+	
+	while((b=get_num()) == 0)
+		printf("Enter a nonzero number:");
+	num=a/b;
+	printf("%.2f/%.2f=%.2f",a,b,num);
+}
+
+char get_first(void)
+{
+	char ch;
+	ch=getchar();
+	while(getchar()!= '\n')
+		continue;
+	return ch;
+}
+
+char get_right(void)
+{
+	char ch;
+	ch=get_first();
+	while(!((((ch =='a' || ch =='s') || ch =='m') || ch == 'd') || ch == 'q'))
+		{
+			printf("Enter a or s or m or d or q:");
+			ch=get_first();	
+		}
+	return ch;
+}
