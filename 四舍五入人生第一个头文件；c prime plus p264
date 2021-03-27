@@ -1,0 +1,49 @@
+#ifndef _HOTEL_H_                    
+#define _HOTEL_H_
+
+
+#define hotel1 180.00
+#define hotel2 225.00
+#define hotel3 255.00
+#define hotel4 355.00
+#define rate 0.95
+int get_hotel(void)
+{			
+	printf("**********************************************\n");
+	printf("Enter the number of the desired hotel:\n");
+	printf("1) Fairfield Arms        2) Hotel Olympic\n");
+	printf("3) Chertowrthy Plaza     4) The Stockton\n");
+	printf("5) Quit\n");
+	printf("**********************************************\n");
+	printf("Your choice:");
+	return get_int();
+}
+
+int get_night(void)
+{	
+	printf("How many nights are needed?");
+	return get_int();
+}
+
+int get_int(void)
+{
+	int num;
+	while(scanf("%d",&num) != 1)
+	{
+		printf("Please enter a integer:");
+		while(getchar() != '\n')
+			continue;
+	}
+	return num;
+}
+
+int right_choice(void)
+{
+	printf("Your choice doesn't exist.\n");
+	printf("Reenter your choice:");
+	return get_int();
+}
+
+
+
+#endif
