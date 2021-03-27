@@ -1,0 +1,17 @@
+#include<stdio.h>						
+void function (int n);
+int main(void)
+{
+	int num;
+	scanf("%d",&num);
+	function(num);
+ } 
+ void function (int n)
+ {
+ 	int num;
+ 	num=n%2;
+ 	if(n/2>0)
+ 		function(n/2);
+ 	putchar(num == 0 ? '0' : '1');
+ }
+
