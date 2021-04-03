@@ -1,0 +1,41 @@
+#include<stdio.h>								//c prime plus p276 t8
+void power(float num,int pow)
+{
+	int i;
+	double num1=1;
+	if(num==0)
+	{
+		if(pow==0)
+			printf("The 0 to the power 0 is not defined,so it's considered as 1");
+		else
+			printf("The 0 to the power %d is %d",pow,0);
+	}
+	else
+	{
+		if(pow<0)
+		{
+			pow=-pow;
+			for(i=1;i<=pow;i++)
+				num1 *=num;
+			num1=1/num1;
+			printf("The %f to the power %d is %f",num,pow,num1);
+		}
+		else if(pow==0)
+			printf("The %f to the power %d is %d",num,0,1);
+		else
+		{
+			for(i=1;i<=pow;i++)
+				num1 *=num;
+			printf("The %f to the power %d is %f",num,pow,num1);
+		}
+	}
+}
+int main(void)
+{
+	float num;
+	int pow;
+	printf("Enter a nubwer and power to which\n");
+	printf("the number will be raised.\n");
+	scanf("%f %d",&num,&pow);
+	power(num,pow);
+}
