@@ -1,0 +1,28 @@
+#include<stdio.h>									//c prime plus p276 t6
+void larger_of(int * l,int * m,int * n)
+{
+	int temp;
+	temp= (*l>*m ? *m: *l);
+	*l= (*l>*m ? *l: *m);
+	*m=temp;
+	if(*m<*n)
+	{
+		if(*l<*n)
+		{
+			temp= (*l>*n ? *n: *l);
+			*l= (*l>*n ? *l: *n);
+			*n=temp;
+		}
+		temp= *n;
+		*n=*m;
+		*m=temp;
+	}
+}
+int main(void)
+{
+	int a=5,b=172,c=6;
+	printf("Originally a=%d,b=%d and c=%d.\n",a,b,c);
+	larger_of(&a,&b,&c);
+	printf("Now a=%d,b=%d and c=%d.",a,b,c);
+}
+
