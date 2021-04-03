@@ -1,0 +1,27 @@
+#include<stdio.h>										//c prime plus p276 t7
+#include<ctype.h>
+void function(char ch,int * n)
+{
+	int i,num;
+	char ch1;
+	i=*n;
+	if(isalpha(ch))
+	{
+		i++;
+		ch1=toupper(ch);
+		printf("The %dth character : %d\n",i,ch1-'A'+1);
+	}
+	else
+	{
+		i++;
+		printf("The %dth character : %d\n",i,-1);
+	}
+	*n=i;
+}
+int main(void)
+{
+	char ch;
+	int i=0;
+	while((ch=getchar()) != EOF)
+			function(ch,&i);
+}
