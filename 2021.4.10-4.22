@@ -1,0 +1,640 @@
+#include<stdio.h>
+#define year 5
+#define month 12
+int main(void)
+{
+ int i,n;
+ float sum;
+ float rain[year][month]=
+ {
+  {4.3,4.3,4.3,3.0,2.0,1.2,0.2,0.2,0.4,2.4,3.5,6.6},
+  {8.5,8.2,4.2,5.0,5.2,1.3,2.2,1.4,7.8,6.5,1.2,7.8},
+  {4.2,3.3,4.1,3.6,6.8,6.2,1.2,0.8,4.4,2.5,2.5,7.6},
+  {4.7,4.2,4.3,4.3,9.7,1.8,5.2,3.2,4.4,2.8,5.5,6.9},
+  {3.5,4.6,2.3,3.0,2.0,3.2,4.2,5.3,6.4,0.4,3.5,4.1}
+ };
+ printf("YEAR    RIANFALL\n");
+ for(i=0;i<year;i++)
+ {
+  sum=0;
+  for(n=0;n<month;n++)
+   sum+=rain[i][n];
+  printf("%d    %.2f\n",2010+i,sum/month);
+ }
+}
+
+
+#include<stdio.h>
+#include<math.h>
+int main(void)
+{
+ int a,b,c;
+ float x1,x2;
+ scanf("%d %d %d",&a,&b,&c);
+ if(b*b-4*a*c>0)
+ {
+  x1=(-b+sqrt(b*b-4*a*c))/(2*a);
+  x2=(-b-sqrt(b*b-4*a*c))/(2*a);
+  printf("x1=%.3f,x2=%.3f",x1,x2);
+ }
+ else if(b*b-4*a*c==0)
+ {
+  x1=x2=-b/(2*a);
+  printf("x1=x2=%.3f",x1,x2);
+ }
+ else
+  printf("No root!");
+ 
+}
+
+#include<stdio.h>
+#define year 5
+#define month 12
+float sumyear(float ar[][month])
+{
+	float total=0;
+	int y,m;
+		for(m=1;m<=month;m++)
+			total += ar[y][m];
+	return total;	
+}
+
+int main(void)
+{
+	int i;
+ 	float rain[year][month]=
+ 	{
+  		{4.3,4.3,4.3,3.0,2.0,1.2,0.2,0.2,0.4,2.4,3.5,6.6},
+  		{8.5,8.2,4.2,5.0,5.2,1.3,2.2,1.4,7.8,6.5,1.2,7.8},
+  		{4.2,3.3,4.1,3.6,6.8,6.2,1.2,0.8,4.4,2.5,2.5,7.6},
+  		{4.7,4.2,4.3,4.3,9.7,1.8,5.2,3.2,4.4,2.8,5.5,6.9},
+  		{3.5,4.6,2.3,3.0,2.0,3.2,4.2,5.3,6.4,0.4,3.5,4.1}
+ 	};
+ 	printf("YEAR    RIANFALL    AVERAGE\n");
+ 	for(i=0;i<year;i++)
+  		printf("%d    %.2f       %.2f\n",2010+i,sumyear(rain+i),sumyear(rain+i)/month);
+}
+
+
+
+#include<stdio.h>
+
+void shownum(float ar[3][5])
+
+{
+
+ int row, col;
+
+ for(row = 0; row < 3; row++)
+
+ {
+
+  for(col = 0; col < 5; col++)
+
+   printf("%.1f ", ar[row][col]);
+
+  printf("\n");
+
+ }
+
+}
+
+
+
+float max(float ar[3][5])
+
+{
+
+ float max = 0;
+
+ int row, col;
+
+ for(row = 0; row < 3; row++)
+
+  for(col = 0; col < 5; col++)
+
+   max = (max > ar[row][col] ? max : ar[row][col]);   
+
+ return max;                                                                                                       
+
+}
+
+
+
+float iaverage(float*tr, int num)
+
+{
+
+ int i;
+
+ float overallnum = 0;
+
+ for(i = 0; i < num; i++)
+
+  overallnum += tr[i];
+
+ return overallnum/num;
+
+}
+
+
+
+int main()
+
+{
+
+ int row, col;
+
+ float num[3][5] =
+
+ {
+
+  {1.1,1.2,1.3,1.4,1.5},
+
+  {2.1,2.2,2.3,2.4,2.5},
+
+  {3.1,3.2,3.3,3.4,3.5}
+
+ };
+
+ float average[3];
+
+ /*for(row = 0; row < 3; row++)
+
+  for(col = 0; col < 3; col++)
+
+   scanf("%f", &num[row][col]);*/
+
+ shownum(num);
+
+ for(row = 0; row < 3; row++)
+
+ {
+
+  average[row] = iaverage(*(num + row),5);
+
+  printf("The average number of row%d=%.1f\n", row + 1, average[row]);
+
+ }
+
+ printf("The average number of all numbers is %.1f\n", iaverage(average,3));
+
+ printf("The biggest number of all numbers is %.1f", max(num));
+
+ return 0;
+
+}
+
+
+
+
+#include<stdio.h>
+
+void ass1(double tr[],double so[],int num)
+
+{
+
+ int i;
+
+ for(i=0;i<num;i++)
+
+  tr[i]=so[i];
+
+}
+
+
+
+void ass2(double *tr,double *so,int num)
+
+{
+
+ int i;
+
+ for(i=0;i<num;i++)
+
+  *(tr+i)=*(so+i);
+
+}
+
+
+
+void ass3(double tr[],double so[],double so1[])
+
+{
+
+ int i=0;
+
+ while(so < so1)
+
+  *tr++ = *so++;
+
+ 
+
+}
+
+
+
+int main()
+
+{
+
+ int i;
+
+ double source[5]={1.1,2.2,3.3,4.4,5.5};
+
+ double target1[5];
+
+ double target2[5];
+
+ double target3[5];
+
+ ass1(target1,source,5);
+
+ ass2(target2,source,5);
+
+ ass3(target3,source,source+5);
+
+ for(i = 0; i < 5; i++)
+
+  printf("source[%d]=%.1f,target1[%d]=%.1f,target2[%d]=%.1f,target2[%d]=%.1f\n",
+
+  i,source[i],i,target1[i],i,target2[i],i,target3[i]);
+
+ return 0;
+
+}
+
+#include<stdio.h>
+int max(int *ar, int num)
+{
+ int max = 0;
+ int i;
+ for(i = 0; i < num; i++)
+   max = (max > ar[i] ? max : ar[i]);   
+ return max;                                                                                                       
+}
+
+int main()
+{
+ int num[] = {1,3,5,2,4,1,5,6,3,5,2};
+ printf("%d", max(num, sizeof(num)/sizeof(num[0])));
+ return 0;
+}
+
+#include<stdio.h>
+int max(float *ar, int num)
+{
+ float max = 0;
+ int cor = 0;
+ int i;
+ for(i = 0; i < num; i++)
+  if(max <= ar[i])
+  {
+   max = (max > ar[i] ? max : ar[i]);   
+   cor = i;
+  }
+ return cor;                                                                                                       
+}
+
+int main()
+{
+ float num[] = {1,3,5,2,4,1,5,7,3,55,2};
+ printf("%d", max(num, sizeof(num)/sizeof(num[0])));
+ return 0;
+}
+
+#include<stdio.h>
+int lim(int *ar, int num)
+{
+ int max, min;
+ int i;
+ for(i = 0, max = min = ar[0]; i < num; i++)
+ {
+  max = (max >= ar[i]) ? max : ar[i];   
+  min = (min <= ar[i]) ? min : ar[i];
+ }
+ return max-min;                                                                                                       
+}
+
+int main()
+{
+ int num[] = {1,3,5,2,44,1,5,6,3,5,2};
+ printf("%d", lim(num, sizeof(num)/sizeof(num[0])));
+ return 0;
+}
+
+#include<stdio.h>
+void updown(int *ar, int num)
+{
+ int *midnum;
+ int i;
+ for(i = 0; i < num; i++)
+  midnum[i] = ar[num - i]; 
+ for(i = 0; i < num; i++)
+  ar[i] = midnum[num - i];                                                                                                     
+}
+
+int main()
+{
+ int i;
+ int num[] = {1,3,5,2,4,1,5,6,3,5,2};
+ updown(num, sizeof(num)/sizeof(num[0]));
+ for(i = 0;i < sizeof(num)/sizeof(num[0]);i++)
+  printf("%d ",num[i]);
+ return 0;
+}
+
+#include<stdio.h>
+void ass(double tr[],double so[],int num)
+{
+ int i;
+ for(i=0;i<num;i++)
+  tr[i]=so[i];
+}
+
+int main()
+{
+ int i,m;
+ double num[5][5] =
+ {
+  {1.1,1.2,1.3,1.4,1.5},
+  {2.1,2.2,2.3,2.4,2.5},
+  {3.1,3.2,3.3,3.4,3.5},
+  {4.1,4.2,4.3,4.4,4.5},
+  {5.1,5.2,5.3,5.4,5.5}
+ };
+ double target[5][5];
+ for(i = 0; i < 5; i++)
+  ass(*(target + i),*(num+i),5);
+ for(i = 0; i < 5; i++)
+  for(m = 0; m < 5; m++)
+   printf("num[%d][%d]=%.1f,target[%d][%d]=%.1f\n"
+   ,i,m,num[i][m],i,m,target[i][m]);
+ return 0;
+}
+
+#include<stdio.h>
+void ass(int tr[],int so[])
+{
+ int i;
+ for(i=0;i<3;i++)
+  tr[i]=so[i+2];
+}
+int main()
+{
+ int i;
+ int source[7] = {1,26,6,83,87,3,6};
+ int target[3];
+ ass(target,source);
+ for(i=0; i<3; i++)
+  printf("source[%d] = target[%d] = %d\n", i+2, i, target[i]);
+ return 0;
+}
+
+
+
+#include<stdio.h>
+
+void shownum(float ar[3][5])
+
+{
+
+ int row, col;
+
+ for(row = 0; row < 3; row++)
+
+ {
+
+  for(col = 0; col < 5; col++)
+
+   printf("%.1f ", ar[row][col]);
+
+  printf("\n");
+
+ }
+
+}
+
+
+
+float max(float ar[3][5])
+
+{
+
+ float max = 0;
+
+ int row, col;
+
+ for(row = 0; row < 3; row++)
+
+  for(col = 0; col < 5; col++)
+
+   max = (max > ar[row][col] ? max : ar[row][col]);   
+
+ return max;                                                                                                       
+
+}
+
+
+
+float iaverage(float*tr, int num)
+
+{
+
+ int i;
+
+ float overallnum = 0;
+
+ for(i = 0; i < num; i++)
+
+  overallnum += tr[i];
+
+ return overallnum/num;
+
+}
+
+
+
+int main()
+
+{
+
+ int row, col;
+
+ float num[3][5] =
+
+ {
+
+  {1.1,1.2,1.3,1.4,1.5},
+
+  {2.1,2.2,2.3,2.4,2.5},
+
+  {3.1,3.2,3.3,3.4,3.5}
+
+ };
+
+ float average[3];
+
+ /*for(row = 0; row < 3; row++)
+
+  for(col = 0; col < 3; col++)
+
+   scanf("%f", &num[row][col]);*/
+
+ shownum(num);
+
+ for(row = 0; row < 3; row++)
+
+ {
+
+  average[row] = iaverage(*(num + row),5);
+
+  printf("The average number of row%d=%.1f\n", row + 1, average[row]);
+
+ }
+
+ printf("The average number of all numbers is %.1f\n", iaverage(average,3));
+
+ printf("The biggest number of all numbers is %.1f", max(num));
+
+ return 0;
+
+}
+
+#include<stdio.h>
+#define msg "I am a symbolic string constant."
+#define max 81
+void print(char* pr)
+{
+	puts(pr);
+}
+int main()     p321
+{
+	char words[max] = "I am a string in an array.";
+	const char* pr = "Something is pointing at me.";
+	puts("Here are some strings:");
+	puts(msg);
+	puts(words);
+	puts(pr);
+	words[8] = 'p';
+	puts(words);
+	print(msg);				//证明msg是个指针
+	return 0;
+}
+
+
+#include<stdio.h>    p332
+#define stlen 14
+int main()
+{
+	char words[stlen];
+	puts("Enter a string,please.");
+	fgets(words, stlen, stdin);
+	puts("Your string twice(puts(), then fputs()):");
+	puts(words);
+	fputs(words, stdout);
+	puts("Done!");
+	return 0;
+}
+
+#include<stdio.h>    p333
+#define stlen 10
+int main()
+{
+	char words[stlen];
+	puts("Enter a string,please.");
+	while (fgets(words, stlen, stdin) != NULL && words[0] != '\n')
+		fputs(words, stdout);
+	puts("Done!");
+	return 0;
+}
+
+
+#include<stdio.h>
+#define stlen 10							p336
+char * sgets(char* pr)
+{
+	int i;
+	char *ret_val = fgets(pr, stlen, stdin);    //返回代表程序是否输入正常的指针
+	for (i = 0; i < stlen; i++)
+		if (pr[i] == '\n')				//把fgets（）读入的换行符换掉
+			pr[i] = '\0';				//使超过输入个数之后的输入字符被忽略掉
+		else if (pr[i] == '\0')
+			while (getchar() != '\n');
+	return ret_val;
+}
+
+int main()
+{
+	char words[stlen];
+	puts("Enter a string,please.");
+	sgets(words);
+	puts(words);
+	puts("Done!");
+	return 0;
+}
+
+#include<stdio.h>     p341
+#define stlen 81
+void put1(char* pr)
+{
+	while (*pr)
+		putchar(*pr++);
+}
+
+int put2(char* pr)
+{
+	int count =0;
+	while (*pr)
+	{
+		putchar(*pr++);
+		count++;
+	}
+	return count;
+}
+
+int main()
+{
+	char words[stlen];
+	puts("Enter a string,please.");
+	fgets(words, stlen, stdin);
+	put1(words);
+	printf("all %d charasters\n", put2(words));
+	puts(words);
+	puts("Done!");
+	return 0;
+}
+
+
+
+冒泡排序：#include<stdio.h>
+#define stlen 10
+void arr(int* ar)
+{
+	int top, seek;
+	int tem;
+	for (top = 0; top < stlen; top++)
+		for (seek = top +1; seek < stlen ; seek++)
+			if (ar[top] < ar[seek])
+			{
+				tem = ar[seek];
+				ar[seek] = ar[top];
+				ar[top] = tem;
+			}
+}
+int main()
+{
+	int num[stlen];
+	int i;
+	puts("Enter 10 numbers:");
+	for (i = 0; i < stlen; i++)
+		scanf_s("%d", &num[i]);
+	for (i = 0; i < stlen; i++)
+		printf("a[%d]=%d\n", i, num[i]);
+	arr(num);
+	for (i = 0; i < stlen; i++)
+		printf("a[%d]=%d\n", i, num[i]);
+	return 0;
+}
+
+
