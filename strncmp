@@ -1,0 +1,42 @@
+#include<stdio.h>
+#include<string.h>
+#define size 6
+char *sgets(char* ar, int n)
+{
+	int i = 0;
+	char* ret_val = fgets(ar, n, stdin);
+	if (ret_val)
+		for (i =0; i < n; i++)
+			if (ar[i] == '\n')
+			{
+				ar[i] = '\0';
+				break;
+			}
+			else if (ar[i] == '\0')
+				while (getchar() != '\n');
+	return ret_val;
+}
+int fakestrncmp(char* tar, char* sou, int former)
+{
+	int cmp_end = (strlen(tar) <= strlen(sou)) ? strlen(tar) : strlen(sou);
+	int difference;
+	int i = 0;
+	for (i = 0; i < ((cmp_end < former - 1) ? cmp_end : former - 1); i++)
+		if (tar[i] != sou[i])
+			break;
+	return difference = tar[i] - sou[i];
+}
+int main()
+{
+	char *word[size] =
+	{
+		"astronomy", "astouding",
+		"astrophysics", "ostracize",
+		"asterism", "astrophobia"
+	};
+	int i;
+	for (i = 0; i < size; i++)
+		if (!fakestrncmp(word[i], "astro", 5))
+			puts(word[i]);
+	return 0;
+}
