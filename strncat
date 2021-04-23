@@ -1,0 +1,47 @@
+#include<stdio.h>
+#include<string.h>
+#define stlen 30
+char *sgets(char* ar, int n)
+{
+	int i = 0;
+	char* ret_val = fgets(ar, n, stdin);
+	if (ret_val)
+		for (i =0; i < n; i++)
+			if (ar[i] == '\n')
+			{
+				ar[i] = '\0';
+				break;
+			}
+			else if (ar[i] == '\0')
+				while (getchar() != '\n');
+	return ret_val;
+}
+char *fakestrncat(char* tar, char* sou, int limit)
+{
+	int sou_length = strlen(sou);
+	int tar_length = strlen(tar);
+	int i;
+	tar[tar_length] = ' ';
+	for (i = 0; i < limit ; i++)
+		tar[i + tar_length] = sou[i];
+	tar[tar_length + limit ] = '\0';
+	return tar;
+}
+int main()
+{
+	char flower[stlen];
+	char addon[] = "s smell like old shoes";
+	char bug[stlen];
+	const bugsize = 13;
+	int available;
+	puts("What's your favorite flower?");
+	sgets(flower, stlen);
+	if (strlen(flower) + strlen(addon) + 1 <= stlen)
+		strcat(flower, addon);
+	puts(flower);
+	puts("What's your favorite bug?");
+	sgets(bug, bugsize);
+	available = bugsize - strlen(bug) - 1;
+	puts(fakestrncat(bug, addon, available));
+	return 0;
+}
