@@ -1,0 +1,41 @@
+#include<stdio.h>
+#include<string.h>
+#define size 30
+#define answer "Grant"
+char *sgets(char* ar, int n)
+{
+	int i = 0;
+	char* ret_val = fgets(ar, n, stdin);
+	if (ret_val)
+		for (i =0; i < n; i++)
+			if (ar[i] == '\n')
+			{
+				ar[i] = '\0';
+				break;
+			}
+			else if (ar[i] == '\0')
+				while (getchar() != '\n');
+	return ret_val;
+}
+int fakestrcmp(char* tar, char* sou)
+{
+	int cmp_end = (strlen(tar) <= strlen(sou)) ? strlen(tar) : strlen(sou);
+	int difference;
+	int i;
+	for (i = 0; i < cmp_end; i++)
+		if (tar[i] != sou[i])
+			break;
+	return difference = tar[i] - sou[i];
+}
+int main()
+{
+	char try[size];
+	puts("Who is burried in Grant's tomb?");
+	sgets(try, size);
+	while (fakestrcmp(try, answer) != 0)
+	{
+		puts("No,try again.");
+		sgets(try, size);
+	}
+	puts("That' correct!");
+	return 0;
