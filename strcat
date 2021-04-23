@@ -1,0 +1,37 @@
+#include<stdio.h>
+#include<string.h>
+#define stlen 80
+char *sgets(char* ar, int n)
+{
+	int i = 0;
+	char* ret_val = fgets(ar, n, stdin);
+	if (ret_val)
+		for (i =0; i < n; i++)
+			if (ar[i] == '\n')
+			{
+				ar[i] = '\0';
+				break;
+			}
+			else if (ar[i] == '\0')
+				while (getchar() != '\n');
+	return ret_val;
+}
+char *fakestrcat(char* tar, char* sou)
+{
+	int sou_length = strlen(sou);
+	int tar_length = strlen(tar);
+	int i;
+	tar[tar_length] = ' ';
+	for (i = 0; i < sou_length; i++)
+		tar[i + tar_length] = sou[i];
+	tar[sou_length + tar_length + 1] = '\0';
+	return tar;
+}
+int main()
+{
+	char flower[stlen];
+	char addon[] = "s smell like old shoes ";
+	puts("What's your favorite flower?");
+	sgets(flower, stlen);
+	puts(fakestrcat(flower, addon));
+	return 0;
