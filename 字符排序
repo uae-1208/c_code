@@ -1,0 +1,66 @@
+#include<stdio.h>
+#include<string.h>
+#define line 20
+#define size 81
+char* sgets(char* ar, int n)
+{
+	int i = 0;
+	char* ret_val = fgets(ar, n, stdin);
+	if (ret_val)
+		for (i = 0; i < n; i++)
+			if (ar[i] == '\n')
+			{
+				ar[i] = '\0';
+				break;
+			}
+			else if (ar[i] == '\0')
+				while (getchar() != '\n');
+	return ret_val;
+}
+char* fakestrncpy(char* tar, char* sou, int limit)
+{
+	int sou_length = strlen(sou);
+	int tar_length = strlen(tar);
+	int i;
+	int min = (strlen(sou) <= limit) ? strlen(sou) : limit;
+	for (i = 0; i < min; i++)
+		tar[i] = sou[i];
+	tar[min] = '\0';
+	return tar;
+}
+void sortstring(char* string[size], int num)
+{
+	int order, top;
+	char* temp;
+	int j;
+	
+	for (order = 0; order < num - 1; order++)
+		for (top = order + 1; top <= num; top++)
+			if (strcmp(string[order], string[top]) > 0)
+			{
+				temp = string[order];
+				string[order] = string[top];
+				string[top] = temp;
+			}
+}
+int main()
+{
+	char temp[line][size];
+	char* lines[size];
+	int i = 0;
+	int j;
+	puts("Input up to 20 lines and i will sort tehm.");
+	puts("To stop, press the Enter key at a line's start.");
+	while (i <= line && sgets(temp[i], size))
+	{
+		lines[i] = temp[i];
+		if (lines[i][0] == '\0')
+			break;
+		i++;
+	}
+	sortstring(lines, i);
+	puts("Here's the sorted list:");
+	for (j = 0; j <= i; j++)
+		puts(lines[j]);
+	return 0;
+}
