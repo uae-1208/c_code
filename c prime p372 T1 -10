@@ -1,0 +1,155 @@
+#include <stdio.h>
+#include <ctype.h>
+void input(char* input, int size)
+{
+	int i = 0;
+	for (i = 0; i < size; i++)
+	{
+		input[i] = getchar();
+		if (isblank(input[i]))
+			break;
+	}
+	input[i] = '\0';
+}
+int main()
+{
+	char string[81];
+	input(string, 81);
+	puts(string);
+	return 0;
+}
+
+
+#include <stdio.h>
+#include <ctype.h>
+void inputword(char* input)
+{
+	int i = 0;
+	char temp[1];
+	while (isblank(*temp = getchar()))
+		continue;
+	input[0] = *temp;
+	for (i = 1; ; i++)
+	{
+		input[i] = getchar();
+		if (isblank(input[i]))
+			break;
+	}
+	input[i] = '\0';
+}
+int main()
+{
+	char string[81];
+	inputword(string);
+	puts(string);
+	return 0;
+}
+
+#include <stdio.h>
+#include <ctype.h>
+char* fakestrchr(char* tar, char cha)
+{
+	while (*tar++)
+		if (*tar == cha)
+			return tar;
+	return *tar;
+}
+int main()
+{
+	char string[81];
+	fgets(string, 81, stdin);
+	puts(strchr(string, 'a'));
+	return 0;
+}
+
+#include <stdio.h>
+int iswithin(char* tar, char cha)
+{
+	while (*tar)
+	{
+		if (*tar == cha)
+			return 1;
+		tar++;
+	}
+	return 0;
+}
+int main()
+{
+	char string[81];
+	fgets(string, 81, stdin);
+	printf("%d", iswithin(string, 'a'));
+	return 0;
+}
+
+
+#include <stdio.h>
+char* string_in(char* str1, char* str2)
+{
+	int i;
+	char* temp1;
+	char* temp2;
+	while (*str1)
+	{
+		temp1 = str1;
+		for (i = 0,temp2 = str2; i < strlen(str2); i++, temp2++, temp1++)
+		{
+			if (*temp2 != *temp1)
+				break;
+		}
+		if (str2[i] == '\0')
+			return str1;
+		str1++;
+	}
+	return NULL;
+}
+int main()
+{
+	char string1[81];
+	fgets(string1, 81, stdin);
+	puts(string_in(string1, "atk"));
+	return 0;
+}
+
+
+#include <stdio.h>
+void up_down(char* str)
+{
+	char *temp = str;
+	while (*temp)
+		temp++;
+	do {
+		putchar(*--temp);
+	} while (temp - str);
+}
+int main()
+{
+	char string1[81];
+	fgets(string1, 81, stdin);
+	up_down(string1);
+	return 0;
+}
+
+
+#include <stdio.h>
+#include <ctype.h>
+void eliminate(char* str)
+{
+	char output[81];
+	char* temp = output;
+	int i;
+	for (i = 0; i < strlen(str); i++)
+	{
+		if (isblank(str[i]))
+			continue;
+		*temp++ = str[i];
+	}
+	*temp = '\0';
+	puts(output);
+}
+int main()
+{
+	char string[81];
+	fgets(string, 81, stdin);
+	eliminate(string);
+	return 0;
+}
