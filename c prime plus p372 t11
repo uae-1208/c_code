@@ -1,0 +1,138 @@
+#include <stdio.h>
+#include<ctype.h>
+#include<string.h>
+char* sgets(char* ar, int n)
+{
+	int i = 0;
+	char* ret_val = fgets(ar, n, stdin);
+	if (ret_val)
+		for (i = 0; i < n; i++)
+			if (ar[i] == '\n')
+			{
+				ar[i] = '\0';
+				break;
+			}
+			else if (ar[i] == '\0')
+				while (getchar() != '\n');
+	return ret_val;
+}
+void print(char* str[81], int count)
+{
+	int i;
+	for (i = 0; i < count; i++)
+		puts(str[i]);
+}
+void ascii(char* str[81], int count)
+{
+	int i;
+	int top, seek;
+	char* temp;
+	for(top = 0; top < count - 1; top++)
+		for(seek = top + 1; seek < count; seek ++)
+			if (str[top][0] > str[seek][0])
+			{
+				temp = str[seek];
+				str[seek] = str[top];
+				str[top] = temp;
+			}
+}
+void strlenf(char* str[81], int count)
+{
+	int i;
+	int top, seek;
+	char* temp;
+	for (top = 0; top < count - 1; top++)
+		for (seek = top + 1; seek < count; seek++)
+			if (strlen(str[top]) > strlen(str[seek]))
+			{
+				temp = str[seek];
+				str[seek] = str[top];
+				str[top] = temp;
+			}
+}
+int wordstrlen(char* str)
+{
+	int num = 0;
+	while (*str)
+	{
+		if (*str != ' ')
+			num++;
+		else
+			break;
+		str++;
+	}
+	return num;
+}
+void wordlegth(char* str[81], int count)
+{
+	int i;
+	int top, seek;
+	char* temp;
+	for (top = 0; top < count - 1; top++)
+		for (seek = top + 1; seek < count; seek++)
+			if (wordstrlen(str[top]) > wordstrlen(str[seek]))
+			{
+				temp = str[seek];
+				str[seek] = str[top];
+				str[top] = temp;
+			}
+}
+void clear(char* str[81], int count)
+{
+	int i;
+	for (i = 0; i < count; i++)
+		str[i][0] = '\0';
+}
+
+int main()
+{
+	int i;
+	int ch;
+	int count = 0;
+	char string[10][81];
+	char* input[81]; 
+	int choice;
+	puts("List:");
+	puts("1.Print orginal strings.");
+	puts("2.Sorted by the ascii.");
+	puts("3.Sorted by the lengths of strings.");
+	puts("4.Sorted by the legth of the first word of  strings.");
+	puts("5.Quit");
+	scanf("%d", &choice);
+	getchar();                                               //清除缓冲区域
+	while (choice != 5)
+	{
+		puts("Enter up to 10 strings:");
+		while (count <= 10)
+		{
+			sgets(string[count], 81);
+			ch = string[count][0];
+			input[count] = string[count];
+			if (ch == EOF || ch == '\0')
+				break;
+			else
+				count++;
+		}
+		switch (choice)
+		{
+		case 1:print(input, count);
+			break;
+		case 2:ascii(input, count);
+			break;
+		case 3:strlenf(input, count);
+			break;
+		case 4:wordlegth(input, count);
+			break;
+		}
+		for (i = 0; i < count; i++)
+			puts(input[i]);
+		puts("Round over!");
+		clear(input, count);
+		count = 0;
+		ch = 65;
+		scanf("%d", &choice);
+		getchar();
+	}
+	puts("Bye!");
+	return 0;
+}
