@@ -1,0 +1,156 @@
+1.#include <stdio.h>
+#include <time.h>
+#include <stdlib.h> 
+int main()
+{
+	int a=0;
+	int count=0;
+	int num;
+	srand((unsigned)time(NULL));
+	while(count<15)
+	{
+		printf("%-5d",num=rand()%100);
+		a++;
+		count++;
+		if(a==5)
+		{
+			putchar('\n');
+			a=0;
+		}
+	}
+	return 0;
+}
+
+2.
+#include <stdio.h>
+int lab7_2(float ar[100],int n)
+{
+	float max=0;
+	float min=100;
+	float average=0;
+	int above_avgs=0;	
+	int i;
+	for(i=0;i<n;i++)
+	{
+		if(ar[i]>max)
+			max=ar[i];
+		if(ar[i]<min)
+			min=ar[i];
+		average+=ar[i];
+	}
+	average/=n;
+	for(i=0;i<n;i++)
+		if(ar[i]>average)
+			above_avgs++;
+	printf("max=%.2f,min=%.2f,above_avgs=%d\n",max,min,above_avgs);		
+}
+int main()
+{
+	float ar[100];
+	int i=0;
+	do
+	{
+		scanf("%f",&ar[i]);
+		i++;
+	}while(getchar()==' ');
+	lab7_2(ar,i);
+	return 0;
+}
+ 3.
+#include <stdio.h>
+int main()
+{
+	int num[20]={1,1};
+	int i;
+	for(i=2;i<20;i++)
+		num[i]=num[i-1]+num[i-2];
+	for(i=0;i<20;i++)
+		printf("num[%d]=%d\n",i,num[i]);
+	return 0;
+}
+4.
+#include <stdio.h>
+int lab8_1(int ar1[3][3],int ar2[9])
+{
+	int i,j;
+	int k=0;
+	for(i=0;i<3;i++)
+		for(j=0;j<3;j++)
+		{
+			ar1[i][j]=ar2[k];
+			k++;
+		}
+}
+int main()
+{
+	int ar1[3][3];
+	int ar2[9];
+	int i,j;
+	do
+	{
+		scanf("%d",&ar2[i]);
+		i++;
+	}while(getchar()==' ');
+	lab8_1(ar1,ar2);
+	return 0;
+}
+
+5.
+#include <stdio.h>
+int lab8_2(int ar[3][4])
+{
+	int i,j;
+	int x=0;
+	int y=0;
+	int base=ar[x][y];
+	for(i=0;i<3;i++)
+		for(j=0;j<4;j++)
+		{
+			if(base<ar[i][j])
+			{
+				base=ar[i][j];
+				x=i;
+				y=j;
+			}		
+		}	
+	printf("m[%d][%d]=%d\n",x,y,base);		
+}
+int main()
+{
+	int ar[3][4];
+	int i,j;
+	for(i=0;i<3;i++)
+		for(j=0;j<4;j++)
+			scanf("%d",&ar[i][j]);
+	lab8_2(ar);
+	return 0;
+}
+
+6.
+#include <stdio.h>
+int lab8_3(int ar[6][6])
+{
+	int i,j;
+	for(i=0;i<6;i++)
+		for(j=0;j<6;j++)
+			if(i==j)
+				ar[i][j]=1;
+			else
+				ar[i][j]=0;
+}
+int main()
+{
+	int ar[6][6];
+	int i,j;
+	for(i=0;i<6;i++)
+		for(j=0;j<6;j++)
+			scanf("%d",&ar[i][j]);
+	lab8_3(ar);
+	for(i=0;i<6;i++)
+	{
+		for(j=0;j<6;j++)
+		printf("%d ",ar[i][j]);
+		putchar('\n');
+		}	
+	return 0;
+}
