@@ -1,0 +1,592 @@
+水下实验室：
+/*tese 1:
+	int row,n,i,ROW;
+	scanf("%d", &n);
+	ROW = (n + 1) / 2;
+	for (row = 1; row <= ROW; row++)
+	{
+		for (i = ROW - row; i > 0; i--)
+			printf(" ");
+		for (i = 1; i <= 2 * row - 1; i++)
+			printf("*");
+		putchar('\n');
+	}
+	for (row = 1; row < ROW; row++)
+	{
+		for (i = 1; i <= row ; i++)
+			printf(" ");
+		for (i = 1; i <= n - 2 * row; i++)
+			printf("*");
+		putchar('\n');
+	}*/
+	/*tese 3:
+	long num[81] = { 1,1 };
+	int i;
+	int n;
+	scanf("%d", &i);
+	if (i > 2)
+		for (n = 2; n < i; n++)
+			num[n] = num[n - 1] + num[n - 2];
+	printf("%d", num[i-1]);*/
+	/*tese4：
+	int digit = 0;
+	int letter = 0;
+	int other = 0;
+	int blank = 0;
+	char ch;
+	int num ;
+	int inverse;
+	while ((ch = getchar()) != '\n')
+	{
+		if (isalpha(ch))
+			letter++;
+		else if (isblank(ch))
+			blank++;
+		else if (isdigit(ch))
+		{
+			digit++;
+			num = 10 * num + ch - '0';
+		}
+		else
+			other++;
+	}
+	inverse = verse(num);
+	printf("字母：%d\n", letter);
+	printf("空格：%d\n", blank);
+	printf("数字：%d\n", digit);
+	printf("其他：%d\n", other);
+	printf("数字为：%d\n", num);
+	printf("逆序为：%d\n", inverse);
+	if (inverse == num)
+		printf("是回文数字");*/
+	/*test5:
+	int num, i;
+	int all;
+	int k;
+	int cause[81];
+	while (scanf("%d", &num) && num != 0)
+	{
+		all = 1;
+		k = 0;
+		while (num != 1)
+		{
+			for (i = 2; i <= num; i++)
+			{
+				if (num % i == 0)
+				{
+					cause[k] = i;
+					k++;
+					break;
+				}
+			}
+			num = num / i;
+		}
+		for (i = 0; i < k; i++)
+		{
+			if (i == (k - 1))
+				printf("%d = ", cause[i]);
+			else
+				printf("%d * ", cause[i]);
+			all *= cause[i];
+		}
+		printf("%d\n", all);
+	}*/
+	/* tese 2:
+	int base, num;
+	char option[] = { '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F' };
+	char n[81];
+	int i = 0;
+	int k;
+	scanf("%d %d", &num, &base);
+	while (num != 0)
+	{
+		n[i] = option[num % base];
+		num /= base;
+		i++;
+	}
+	for (k = i - 1; k >= 0; k--)
+		putchar(n[k]);*/
+
+
+test7：
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+char* sgets(char* ar, int n)
+{
+	int i = 0;
+	char* ret_val = fgets(ar, n, stdin);
+	if (ret_val)
+		for (i = 0; i < n; i++)
+			if (ar[i] == '\n')
+			{
+				ar[i] = '\0';
+				break;
+			}
+			else if (ar[i] == '\0')
+				while (getchar() != '\n');
+	return ret_val;
+}
+int compare(char* str1, char* str2)
+{
+	while (*str1 && *str2)
+	{
+		if (*str1 != *str2)
+			break;
+		str1++;
+		str2++;
+	}
+	printf("%d", *str1 - *str2);
+	putchar('\n');
+}
+void connect(char* str1, char* str2)
+{
+	int start = strlen(str1);
+	int end = strlen(str2);
+	int i;
+	for (i = 0; i < end; i++)
+		str1[start + i] = str2[i];
+	str1[start + i] = '\0';
+	puts(str1);
+}
+void Tolower(char* str)
+{
+	int i;
+	for (i = 0; i < strlen(str); i++)
+		str[i] = tolower(str[i]);
+}
+void arrange(char* str)
+{
+	int top, seek;
+	char temp;
+	for(top = 0; top < strlen(str) - 1; top++)
+		for (seek = top + 1; seek < strlen(str); seek++)
+			if (str[top] < str[seek])
+			{
+				temp = str[top];
+				str[top] = str[seek];
+				str[seek] = temp;
+			}
+	puts(str);
+}
+int main()
+{
+	char string[2][81];
+	sgets(string[0], 81);
+	sgets(string[1], 81);
+	compare(string[0], string[1]);
+	connect(string[0], string[1]);
+	Tolower(string[0]);
+	arrange(string[0]);
+	return 0;
+}
+
+
+Rm电控week3：
+#include <stdio.h>
+void  fei(int* num, int i)
+{
+	num[i] = num[i - 1] + num[i - 2];
+	if (i < 5)
+		fei(num,i + 1);
+}
+int main()
+{
+	int feinum[81] = { 1,1 };
+	fei(feinum, 2);
+	printf("%d", feinum[4]);
+	return 0;
+}
+
+	
+Rm电控week4：
+#include <stdio.h>
+int main()
+{
+	char* day[] = { "Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday" };
+	int i;
+	scanf("%d", &i);
+	puts(day[i - 1]);
+	return 0;
+}
+
+#include <stdio.h>
+
+
+终极考核题：
+test1：
+int main()
+{
+	int x, y, z;
+	int i;
+	for (i = 100; i <= 999; i++)
+	{
+		z = i % 10;
+		y = (i - z) / 10 % 10;
+		x = (i - 10 * y - z) / 100 % 10;
+		if (i == x * x * x + y * y * y + z * z * z)
+			printf("%d\n", i);
+	}
+	return 0;
+}
+
+
+擂台：
+Test2
+#include <stdio.h>
+void check(int num)
+{
+	int i, n;
+	for (n = 2; n <= num; n++)
+	{
+		for (i = 2; i <= n; i++)
+			if (n % i == 0)
+				break;
+		if (n == i)
+			printf("%d\n", n);
+	}
+
+}
+int main()
+{
+	int num;
+	scanf("%d", &num);
+	check(num);
+	return 0;
+}
+
+Test3
+#include <stdio.h>
+#include <ctype.h>
+char* sgets(char* ar, int n)
+{
+	int i = 0;
+	char* ret_val = fgets(ar, n, stdin);
+	if (ret_val)
+		for (i = 0; i < n; i++)
+			if (ar[i] == '\n')
+			{
+				ar[i] = '\0';
+				break;
+			}
+			else if (ar[i] == '\0')
+				while (getchar() != '\n');
+	return ret_val;
+}
+
+int translate(char* str)
+{
+	char* orginal = str;
+	while (*str)
+	{
+		if (!isalpha(*str))
+			return 1;
+		str++;
+	}
+	while (str != orginal)
+		str--;
+	printf("Code:");
+	puts(str);
+	while (*str)
+	{
+		if ((65 <= *str && *str <= 77) || (97 <= *str && *str <= 109))
+			*str += 13;
+		else
+			*str -= 13;
+		str++;
+	}
+		printf("Orginal:");
+		puts(orginal);
+		return 0;
+}
+int main()
+{
+	char code[81];
+	sgets(code, 81);
+	if (translate(code))
+		printf("Failed\n");
+	return 0;
+}
+
+Test4
+#include <stdio.h>
+#include <ctype.h>
+int check(int* num, int check_num,int i)
+{
+	int k;
+	for (k = 0; k < i; k++)
+		if (num[k] == check_num)
+			return 0;
+	return 1;
+}
+void progress(int* num, int i)
+{
+	int newnum[81];
+	int k;
+	int temp = i;
+	int top, seek,temp_num;
+	for (k = 0; k < temp; k++)
+	{
+		if (check(newnum, *num, k))
+			newnum[k] = *num;
+		else
+		{
+			temp--;
+			k--;
+		}
+		num++;
+	}
+	for(top = 0; top < k - 1; top++)
+		for (seek = top + 1; seek < k; seek++)
+			if (newnum[top] < newnum[seek])
+			{
+				temp_num = newnum[top];
+				newnum[top] = newnum[seek];
+				newnum[seek] = temp_num;
+			}
+	for (i = 0; i < k; i++)
+		printf("%d ", newnum[i]);
+	printf("%  个数 %d\n", k);
+}
+int main()
+{
+	int num[81];
+	int i = 0;
+	while (scanf("%d", &num[i]) == 1)
+		i++;
+	progress(num, i);
+	return 0;
+}
+
+Test5
+#include <stdio.h>
+char* sgets(char* ar, int n)
+{
+	int i = 0;
+	char* ret_val = fgets(ar, n, stdin);
+	if (ret_val)
+		for (i = 0; i < n; i++)
+			if (ar[i] == '\n')
+			{
+				ar[i] = '\0';
+				break;
+			}
+			else if (ar[i] == '\0')
+				while (getchar() != '\n');
+	return ret_val;
+}
+int isprime(int num)
+{
+	int i;
+	for (i = 2; i < num; i++)
+		if (num % i == 0)
+			return 0;
+	return 1;
+}
+int haveoccured(int* num, int check, int k)
+{
+	int i;
+	for (i = 0; i < k; i++)
+		if (num[i] == check)
+			return 1;
+	return 0;
+}
+
+int sum(int* num, int check,int k)
+{
+	int count = 0;
+	int i;
+	for (i = 0; i < k; i++)
+		if (num[i] == check)
+			count++;
+	return count;
+}
+int main()
+{
+	int num;
+	int prime[81];
+	int i;
+	int k = 0;
+	int index[81];
+	int iprime[81];
+	int indexi;
+	scanf("%d", &num);
+	printf("%d=", num);
+	while (num != 1)
+	{
+		for (i = 2; i <= num; i++)
+			if (isprime(i))
+			{
+				if (num % i == 0)
+				{
+					prime[k] = i;
+					k++;
+					num /= i;
+					break;
+				}
+			}
+	}
+	for (i = 0, indexi=0; i < k; i++)
+	{
+		if (!haveoccured(prime, prime[i], i))
+		{
+			iprime[indexi] = prime[i];
+			index[indexi] = sum(prime, prime[i], k);
+			indexi++;
+		}
+	}
+	for (i = 0; i < indexi; i++)
+	{
+		printf("%d^%d", iprime[i], index[i]);
+		if (i != (indexi - 1))
+			putchar('*');
+	}
+	return 0;
+}
+
+线性方程组：
+#include <stdio.h>
+#include<math.h>
+void exchange(float *pr1,float *pr2,int n)
+{
+ 	float temp[n];
+ 	int i;
+ 	for(i=0;i<n;i++)
+ 	{
+  		temp[i]=pr1[i];
+  		pr1[i]=pr2[i];
+  		pr2[i]=temp[i];
+ 	}
+}
+void arrange(int const_row, int row, float(*pr)[const_row + 1])
+{
+ 	int top, seek;
+ 	for (top = 0; top < row - 1; top++)
+  	for(seek=top+1;seek<row;seek++)
+  	if (abs(pr[top][0]) < abs(pr[seek][0]))
+   		exchange(pr[top],pr[seek],row+1);  
+}
+void elimination(int const_row, int row, float(*pr)[const_row + 1])
+{
+	int i, j;
+ 	float(*pr1)[const_row] = pr[1] + 1;
+ 	int col = row + 1;
+ 	arrange(const_row,row,pr);
+ 	for (i = 1; i < row; i++)
+ 	{
+  	for (j = col - 1; j >= 0; j--)
+   		pr[i][j] = pr[i][j] - pr[0][j] * pr[i][0] / pr[0][0];
+ 	}
+ 	if (row > 1)
+  		elimination(const_row, row - 1, pr1);
+}
+void substitution(int row,float num[row][row+1])
+{
+ 	int i,j;
+ 	int col=row+1;
+ 	for(i=row-1;i>=0;i--)
+ 	{
+  		for(j=col-2;j>i;j--)
+   		num[i][col-1]=num[i][col-1]-num[i][j]*num[j][j];
+  		num[i][i]=num[i][col-1]/num[i][i];
+ 	}
+}
+void get_num(int row,float num[row][row+1])
+{
+ 	int i,j;
+ 	int col=row+1;
+ 	for(i=0;i<row;i++)
+  		for(j=0;j<col;j++)
+   			scanf("%f",&num[i][j]);
+}
+void printmatrix(int row,float num[row][row+1])
+{
+ 	int i,j;
+ 	int col=row+1;
+ 	for(i=0;i<row;i++)
+ 	{
+  		for(j=0;j<col;j++)
+   			printf("%5.2f ",num[i][j]);
+  		putchar('\n');
+  	}
+}
+int judge(int row,float num[row][row+1])
+{
+ 	int i,j;
+ 	int k;
+ 	int c=2;
+ 	int col=row+1;
+ 	for(i=0;i<row;i++)
+ 	{
+ 		k=1;
+  		for(j=0;j<col-2;j++)
+   		if(num[i][j]!=0) 
+    	k=0;
+  		if(k)
+  		{
+   			if(num[i][col-2]==0)
+    			if(num[i][col-1] == 0) 
+    				 c=1;
+    			else
+     			c=0;
+  		} 
+ 	}
+ 	return c;
+}
+int main()
+{
+ 	freopen("C:\\Users\\uae\\Desktop\\1.txt", "r", stdin);
+ 	int i;
+ 	int j;
+ 	int row;
+ 	scanf("%d", &row);
+ 	int col=row+1;
+	float num[row][col];
+	float (*pr)[col]=(num[0]);
+ 	get_num(row,num);
+ 	printf("Orginal matrix:\n");
+ 	printmatrix(row,num);
+ 	elimination(row,row,pr);
+ 	printf("After elimination:\n");
+ 	printmatrix(row,num);
+ 	switch(judge(row,num))
+ 	{
+  		case 0:printf("No solution.");
+    		   break;
+  		case 1:printf("Infinite group solutions.");
+    		   break;
+		case 2:substitution(row,num);
+ 			   printf("Solution:\n");
+ 			   for(i=0;i<row;i++)
+  		   	   		printf("x%d=%.2f\n",i+1,num[i][i]);
+  		   	   	break;
+  	}
+    fclose(stdin);
+ 	return 0;
+}
+公约数公倍数：
+#include<stdio.h>
+int yue(int a, int b)
+{
+	int temp, max, min;
+	max = (a > b) ? a : b;
+	min = (a > b) ? b : a;
+	while (max % min != 0)
+	{
+		temp = max % min;
+		max = min;
+		min = temp;
+	}
+	return  min;
+}
+int main()
+{
+	int x, y;
+	scanf("%d %d", &x, &y);
+	int num1, num2;
+	for (num1 = x; num1 <= y; num1++)
+		for (num2 = num1; num2 <= y; num2++)
+			if (yue(num1, num2) == x && num1 * num2 / yue(num1, num2) == y)
+				printf("%d %d\n", num1, num2);
+	return 0;
+}
