@@ -1,0 +1,88 @@
+1.
+#include<stdio.h>
+void arrange(int* pr)
+{
+	int temp;
+	int top, seek;						
+	for(top=0;top<2;top++)				//冒泡排序 
+		for(seek=top;seek<3;seek++)		//将第i小的数依次与之后的数比较大小		
+			if (pr[top] > pr[seek])		//若top小于seek，交换二者数值 
+			{
+				temp = pr[top];
+				pr[top] = pr[seek];
+				pr[seek] = temp;
+			}
+}
+int main()
+{
+	int i;
+	int num[3];
+	for (i = 0; i < 3; i++)		//获取数据 
+		scanf("%d", &num[i]);
+	arrange(num);
+	for (i = 0; i < 3; i++)		//将数据从小到大打印 
+		printf("num[%d]=%d\n", i, num[i]);
+	return 0;
+}
+2.#include<stdio.h>
+int main()
+{
+	char *month[12] = {					//用二维指针容纳12个月份 
+	"January","Febrary","March",
+	"April","May","June","July",
+	"August","September","October",
+	"November","December" };
+	int i;
+	if (scanf("%d", &i) == 1 && (1 <= i && i <= 12))	//判断输入是否正确 
+		printf("The %dth month is %s.", i, month[i - 1]);
+	else
+		printf("Wrong input!");
+	return 0;
+}
+4.#include<stdio.h>
+float average(float* pr)
+{
+	int i;
+	float sum;
+	for (i = 0; i < 4; i++)	//计算平均分 
+		sum += pr[i];
+	return sum / 4;
+}
+int count(float* pr)
+{
+	const int standard = 60;
+	int j;
+	int count=0;
+	for (j = 0; j < 4; j++)		//统计不及格门数 
+		if (pr[j] < standard)
+			count++;
+	return count;
+}
+int main()
+{
+	float grade[3][4] =
+	{ 59,78,64,77,
+	77,96,88,99,
+	15,77,56,32 };
+	int i;
+	for (i = 0; i < 3; i++)
+		printf("第%d个学生的平均分是%.2f\n", i + 1, average(grade[i]));
+	for (i = 0; i < 3; i++)
+		if (count(grade[i]))
+			printf("第%d个学生有%d门不及格\n", i + 1, count(grade[i]));
+	return 0;
+}
+6.#include<stdio.h>
+int main()
+{
+	char str[5][99];
+	int i;
+	int count = 0;
+	for (i = 0; i < 5; i++)
+		gets(str[i]);
+	for (i = 0; i < 5; i++)
+		if (strlen(str[count]) < strlen(str[i]))
+			count = i;
+	printf("最大的字符串为%s", str[count]);
+	return 0;
+}
