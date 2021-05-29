@@ -1,0 +1,66 @@
+6.#include<stdio.h>
+#include<stdlib.h>
+void judge(int* count, int* num, int temp)
+{
+	int i;
+	for (i = 0; i < 10; i++)
+		if (temp == num[i])
+			count[i]++;
+}
+int main()
+{
+	int count[10] = {0};
+	int num[] = { 1,2,3,4,5,6,7,8,9,10 };
+	int temp;
+	int i;
+	srand((unsigned int)time(0));
+	for (i = 0; i < 1000; i++)
+	{
+		temp = rand() % 10 + 1;
+		judge(count, num, temp);
+	}
+	for (i = 0; i < 10; i++)
+		printf("Number %-2d occurs %-3d times.\n", num[i], count[i]);
+	return 0;
+}
+
+7.#include<stdio.h>
+#include<stdlib.h>
+int roll(int dice, int side)
+{
+	int i;
+	int roll_num = 0;
+	for (i = 0; i < dice; i++)
+		roll_num += rand() % side + 1;
+	return roll_num;
+}
+int main()
+{
+	int side,dice,set;
+	int i;
+	puts("Enter the number of sets; q to quit:");
+	srand((unsigned int)time(0));
+	while (1)
+	{
+		if (scanf("%d", &set) != 1)
+		{
+			puts("Wrong!");
+			break;
+		}
+		if (set < 1)
+		{
+			puts("You need to enter set > 0.");
+			puts("Enter again.");
+			puts("Enter the number of sets; q to quit:");
+			continue;
+		}
+		puts("How many sides and how many dice?");
+			scanf("%d %d", &side, &dice);
+		printf("Here are %d sets of %d %d-sidee throws.\n", set, dice, side);
+		for(i=0;i<set;i++)
+			printf("%d ", roll(dice, side));
+		putchar('\n');
+		puts("Enter the number of sets; q to quit:");
+	}
+	return 0;
+}
