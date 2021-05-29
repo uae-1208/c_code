@@ -1,0 +1,73 @@
+P392:
+#include<stdio.h>
+#include<math.h>
+unsigned long int next = 1;
+unsigned int randp(void)
+{
+	next = next * 1103515245 + 12345;
+	return (unsigned int)(next / 65536) % 32768;
+}
+void srandp(unsigned int seed)
+{
+	next = seed;
+}
+int main()
+{	
+	int i;
+	srandp((unsigned int) time(0));
+	for (i = 0; i < 10; i++)
+		printf("%d\n", randp());
+} 
+
+P395：
+#include<stdio.h>
+#include<stdlib.h>
+int count = 0;
+int roll(int dice, int side)
+{
+	int i;
+	int total = 0;
+	for (i = 0; i < dice; i++)
+	{
+		srand((unsigned int)time(0));
+		total += rand() % side + 1;
+		count++;
+	}
+	return total;
+}
+int main()
+{
+	int side, dice;
+	printf("Enter the number of sides per dice, 0 to quit:\n");
+	while (1)
+	{
+		if (scanf("%d", &side) != 1 || side <= 0)
+		{
+			if (side == 0)
+				break;
+			puts("You need to enter an integer >0 .");
+			puts("Let's do it again.");
+			while (getchar() != '\n')
+				continue;
+			printf("Enter the number of sides per dice, 0 to quit:\n");
+			continue;
+		}
+		printf("How many dice?\n");
+		if (scanf("%d", &dice) != 1 || dice < 1)
+		{
+			puts("You need to enter an integer >0.");
+			puts("Let's begin again.");
+			while (getchar() != '\n')
+				continue;
+			printf("Enter the number of sides per dice, 0 to quit:\n");
+			continue;
+		}
+
+		printf("You have rolled a %d using %d %d-sided dice.\n", roll(dice,side), dice, side);
+		printf("Enter the number of sides per dice, 0 to quit:\n");
+
+	}
+	printf("The rand() function was called %d time.\n", count);
+	puts("Good fortune to you!");
+	return 0;
+}
