@@ -1,0 +1,215 @@
+C Prime c14
+P455：
+#include<stdio.h>
+#include<string.h>
+char* sget(char* str, int n)
+{
+	char* ret, * find;
+	ret = fgets(str, n, stdin);
+	if (strchr(str, '\n'))
+	{
+		find = strchr(str, '\n');
+		*find = '\0';
+	}
+	else
+		while (getchar() != '\n')
+			continue;
+	return ret;
+}
+struct man {
+	char fname[30];
+	char lname[30];
+	int letters;
+};
+void getinfo(struct man* temp)
+{
+	puts("Enter your first name:");
+	sget(temp->fname,30);
+	puts("Enter your last name:");
+	sget(temp->lname, 30);
+}
+void getle(struct man* temp)
+{
+	temp->letters = strlen(temp->fname) + strlen(temp->lname);
+}
+void showinfo(struct man* temp)
+{
+	printf("%s %s, your name has %d letters\n", temp->fname, temp->lname, temp->letters);
+}
+int main()
+{
+	struct man guy;
+	getinfo(&guy);
+	getle(&guy);
+	showinfo(&guy);
+	return 0;
+}
+
+P457 :
+#include<stdio.h>
+#include<string.h>
+char* sget(char* str, int n)
+{
+	char* ret, * find;
+	ret = fgets(str, n, stdin);
+	if (strchr(str, '\n'))
+	{
+		find = strchr(str, '\n');
+		*find = '\0';
+	}
+	else
+		while (getchar() != '\n')
+			continue;
+	return ret;
+}
+struct man {
+	char fname[30];
+	char lname[30];
+	int letters;
+};
+struct man getinfo(void)
+{
+	struct man temp;
+	puts("Enter your first name:");
+	sget(temp.fname,30);
+	puts("Enter your last name:");
+	sget(temp.lname, 30);
+	return temp;
+}
+struct man getle(struct man temp)
+{
+	temp.letters = strlen(temp.fname) + strlen(temp.lname);
+	return temp;
+}
+void showinfo(struct man* temp)
+{
+	printf("%s %s, your name has %d letters\n", temp->fname, temp->lname, temp->letters);
+}
+int main()
+{
+	struct man guy = getle(getinfo());
+	showinfo(&guy);
+	return 0;
+}
+
+P460:
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+char* sget(char* str, int n)
+{
+	char* ret, * find;
+	ret = fgets(str, n, stdin);
+	if (strchr(str, '\n'))
+	{
+		find = strchr(str, '\n');
+		*find = '\0';
+	}
+	else
+		while (getchar() != '\n')
+			continue;
+	return ret;
+}
+struct man {
+	char *fname;
+	char *lname;
+	int letters;
+};
+void getinfo(struct man* temp)
+{
+	char str[30];
+	puts("Enter your first name:");
+	sget(str, 30);
+	temp->fname = (char*)malloc(strlen(str) + 1);
+	strcpy(temp->fname, str);
+	puts("Enter your last name:");
+	sget(str, 30);
+	temp->lname = (char*)malloc(strlen(str) + 1);
+	strcpy(temp->lname, str);
+}
+void getle(struct man* temp)
+{
+	temp->letters = strlen(temp->fname) + strlen(temp->lname);
+}
+void cleanup(struct man* temp)
+{
+	free(temp->fname);
+	free(temp->lname);
+}
+void showinfo(struct man* temp)
+{
+	printf("%s %s, your name has %d letters\n", temp->fname, temp->lname, temp->letters);
+}
+int main()
+{
+	struct man guy;
+	getinfo(&guy);
+	getle(&guy);
+	showinfo(&guy);
+	cleanup(&guy);
+	return 0;
+}
+
+P469:
+#include<stdio.h>
+#include<string.h>
+char* sget(char* str, int n)
+{
+	char* ret, * find;
+	ret = fgets(str, n, stdin);
+	if (strchr(str, '\n'))
+	{
+		find = strchr(str, '\n');
+		*find = '\0';
+	}
+	else
+		while (getchar() != '\n')
+			continue;
+	return ret;
+}
+struct book {
+	char name[30];
+	char author[30];
+	float price;
+};
+int main()
+{
+	struct book allbooks[10];
+	FILE* fp;
+	int count = 0, book_num;
+	int i;
+	fp = fopen("3.txt", "a+b");
+	rewind(fp);
+	while (count < 10 && fread(&allbooks[count], sizeof(struct book), 1, fp) == 1)
+	{
+		if (count == 0)
+			puts("current books list:");
+		printf("%s by %s: %.2f\n", allbooks[count].name, allbooks[count].author, allbooks[count].price);
+		count++;
+	}
+	book_num = count;
+	if (count == 10)
+		puts("The books list is full.");
+	else
+	{
+		puts("Add new books' name, press enter at the start of a line to stop:");
+		while (count < 10 && sget(allbooks[count].name,30) != NULL && allbooks[count].name[0] != '\0')
+		{
+			puts("Now enter the author:");
+			sget(allbooks[count].author, 30);
+			puts("Now enter the price:");
+			scanf("%f",&allbooks[count].price);
+			while (getchar() != '\n')
+				continue;
+			count++;
+			if (count < 10)
+				puts("Enter the next book:");
+		}
+		puts("Here is the list of your books:");
+		for(i=0;i<count;i++)
+			printf("%s by %s: %.2f\n", allbooks[i].name, allbooks[i].author, allbooks[i].price);
+		fwrite(&allbooks[book_num], sizeof(struct book), count - book_num, fp);
+	}
+	fclose(fp);
+	return 0;
+}
