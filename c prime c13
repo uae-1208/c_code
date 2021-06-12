@@ -1,0 +1,92 @@
+P423
+#include<stdio.h>
+int main()
+{
+	FILE *source,*target;
+	char ch;
+	long count,last;
+	source=fopen("1.txt","rb");
+	target=fopen("2.txt","wb");
+	fseek(source,0L,SEEK_END);
+	last=ftell(source);
+	for(count=last;count>=0;count--)
+	{
+		fseek(source,-count,SEEK_END);
+		if((ch=getc(source))!=EOF)
+			putc(ch,target);
+	}		
+	return 0;
+}
+
+3.#include<stdio.h>
+#include<ctype.h>
+int main()
+{
+	FILE *source,*target;
+	char ch;
+	source=fopen("1.txt","r");
+	target=fopen("2.txt","w");
+	while((ch=getc(source))!=EOF)
+		putc(toupper(ch),target);
+	return 0;
+}
+Prime
+P440：
+#include<stdio.h>
+#define length 41
+int main()
+{
+	struct book {
+		char title[length];
+		char author[length];
+		float value;
+	};
+	struct book library;
+	puts("Please enter the book title:");
+	gets(library.title);
+	puts("Please enter the author's name:");
+	gets(library.author);
+	puts("Please enter the value:");
+	scanf("%f", &library.value);
+	puts("Below is the information of the book:");
+	printf("%s by %s :$%.2f\n", library.title, library.author, library.value);
+	printf("%s: \"%s\" ($%.2f)\n", library.author, library.title, library.value);
+	return 0;
+}
+
+P330:
+#include<stdio.h>
+#define length 41
+int main()
+{
+	struct book {
+		char title[length];
+		char author[length];
+		float value;
+	};
+	struct book library[10];
+	int count = 0;
+	int index;
+	puts("Now enter the information of the books(Enter \" \" to stop)");
+	puts("Enter the title of the book:");
+	while (count < 10 && gets(library[count].title) &&library[count].title[0] != '\0')
+	{
+		puts("Enter the author of the book:");
+		gets(library[count].author);
+		puts("Enter the value:");
+		scanf("%f", &library[count++].value);
+		while (getchar() != '\n');
+		if (count < 10)
+			puts("Enter the next title:");
+	}
+	if (count > 0)
+	{
+		puts("Here is the list of your books:");
+			for (index = 0; index < count; index++)
+				printf("%s by %s :$%.2f\n", library[index].title,
+					library[index].author, library[index].value);
+	}
+	else
+		puts("No books? Too bad.");
+	return 0;
+}
