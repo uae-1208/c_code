@@ -1,0 +1,54 @@
+#include<stdio.h>
+#include<limits.h>
+char* itob(int num, char* str)
+{
+	int std_num = 01;
+	int i;
+	int size = CHAR_BIT * sizeof(int);
+	for (i = size - 1; i >= 0; i--)
+	{
+		str[i] = (num & std_num) + '0';
+		num >>= 1;
+	}
+	str[size] = '\0';
+	return str;
+}
+void showb(char* str)
+{
+	int i = 0;
+	while (str[i])
+	{
+		putchar(str[i]);
+		if ((i+1) % 4 == 0)
+			putchar(' ');
+		i++;
+	}
+	putchar('\n');
+}
+int invert(int num,int bits)
+{
+	int i;
+	int mask = 1;
+	for (i = 0; i < bits-1; i++)
+	{
+		mask <<= 1;
+		mask += 1;
+	}
+	return num ^ mask;
+}
+int main()
+{
+	int num;
+	char str[CHAR_BIT * sizeof(int) + 1];
+	puts("Enter an integer and see them in binary.");
+	puts("Nonnumeric input terminates program:");
+	while (scanf("%d", &num) == 1)
+	{
+		printf("%d is ", num);
+		showb(itob(num,str));
+		num = invert(num, 4);
+		puts("Inverting the last 4 bits gives");
+		showb(itob(num, str));
+	}
+	return 0;
+}
