@@ -1,0 +1,535 @@
+/*1.四个按键分别为流水灯从左往右、从右往左、从中间向两边再回到中间亮以及开关；
+开关关闭无法进行操作，开关打开所有灯亮，再选择模式0、1、2*/
+/*#include<reg52.h>
+#include<intrins.h>
+#define u unsigned 
+
+sbit s2=P3^0;	   //从右往左
+sbit s3=P3^1;	   //从左往右
+sbit s4=P3^2;	   //中间向两边
+sbit s5=P3^3;	   //关闭或开启
+
+u char count=0;  //控制计时多少个50ms
+u char mod=3;  //流水灯模式
+u char Switch=-1; //控制灯亮与否，为-1时灭；为1时所有灯亮表示开关打开，之后开始选择三种流水灯灯模式
+
+void delay(u int z)
+{
+ 	u int x,y;
+	for(x=0;x<z;x++)
+		for(y=0;y<114;y++);
+}
+
+void timer0inti(void)
+{
+ 	EA=1;
+	ET0=1;
+	TR0=1;
+	TMOD=0x01;
+	TH0=0xfd;
+	TL0=0x4b;
+}
+
+void mod2(void)
+{
+	u char lled,rled;
+	
+ 	lled= P1 | 0x0f;  //左边的四个灯
+	rled= P1 | 0xf0;  //右边的四个灯
+	lled=_crol_(lled,1); //左灯左移，右灯右移
+	rled=_cror_(rled,1);
+	P1=lled&rled;
+	if(P1==0x7e)	   //没有此语句，最外面的两个灯会被跳过而不亮
+	{
+		delay(100);
+		P1=0xe7;
+	}
+}
+
+void main()
+{
+	timer0inti();
+ 	while(1)
+	{
+		if(!s2)
+		{
+			mod=0;
+			P1=0x7f;
+			while(!s2);
+		}
+		if(!s3)
+		{
+			mod=1;
+			P1=0xfe;
+			while(!s3);
+		}
+		if(!s4)
+		{
+			mod=2;
+			if(Switch==1)
+				P1=0xe7;
+			while(!s4);
+		}
+		if(!s5)
+		{
+			mod=3;
+			Switch=-Switch;
+			while(!s5);
+		}	
+	}
+}
+
+void timer0() interrupt 1
+{
+	TH0=0x4b;//计时50ms
+	TL0=0xfd;
+	count++;
+	if(count==2)  //计时0.2s
+	{
+		count=0;
+		switch(mod){
+			case 0: if(Switch==1)
+						P1=_cror_(P1,1);
+					break;
+			case 1: if(Switch==1)
+						P1=_crol_(P1,1);
+					break;
+			case 2: if(Switch==1)
+						mod2();
+					break;
+			case 3: if(Switch==1)
+						P1=0;
+					else if(Switch==-1)
+						P1=0xff;
+					break;
+		}
+	}	
+}*/
+
+
+
+
+
+
+
+
+/*2.计时三分钟，到时间停止计时并亮led，第一个案件暂停计时，第二个继续计时，
+第三个清零时间（灯亮时就灭灯）并继续计时*/
+/*#include<reg52.h>
+#define u unsigned
+
+sbit DULA=P2^6;
+sbit WELA=P2^7;
+sbit s2=P3^0;	 
+sbit s3=P3^1;	   
+sbit s4=P3^2;	   
+
+u char sec=1;  //总秒数
+u char count=0;		 //记录5ms次数
+u char if_timing=1;	//为1时保持计时，为0时停止计时
+u char i=0;	   	//0,1,2,3分别亮第1，2，5，6个灯
+unsigned char dula[]={0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F}; //0,1,2,3,4,5,6,7,8,9
+unsigned char wela[]={0xfe,0xfd,0xef,0xdf};	  //第1、2表示分钟，第5、6个数码管表示秒
+
+void timer0inti(void)
+{
+ 	EA=1;
+	ET0=1;
+	TR0=1;
+	TMOD=0x01;
+	TH0=0xee;
+	TL0=0x01;
+}
+
+void display(u char time)
+{
+	u char min_shi=time/60/10;		//分的十位
+	u char min_ge=time/60%10;		//分的个位
+	u char sec_shi=time%60/10;		//秒的十位
+	u char sec_ge=time%60%10;		//秒的个位
+	
+	P0=0xff;
+	WELA=1;
+	P0=wela[i];
+	WELA=0;
+	
+	P0=0;
+	DULA=1;
+	switch(i){
+		case 0: P0=dula[min_shi];
+				break;
+		case 1: P0=dula[min_ge];
+				break;
+		case 2: P0=dula[sec_shi];
+				break;
+		case 3: P0=dula[sec_ge];
+				break;
+	}
+	DULA=0;
+
+	if(i==3)
+		i=0;
+	else
+		i++;	
+}
+
+void timer0() interrupt 1
+{
+	TH0=0xee;//计时5ms
+	TL0=0x01;
+	display(sec);
+	if(count==200)	  //时间过去了1s
+	{
+		sec++;
+		count=0;
+	}
+	if(if_timing)
+		count++;
+	if(sec==180)	 //计时3分钟时停止计时并亮led灯
+	{
+		P1=0;
+		if_timing=0;
+	}
+}				 
+
+void main()
+{
+	timer0inti();
+	while(1)
+	{
+		if(!s2)				   //暂停计时
+		{
+			if_timing=0;
+			while(!s2);
+		}
+		if(!s3)				  //继续计时
+		{
+			if_timing=1;
+			while(!s3);
+		}
+		if(!s4)				 //清零时间并继续计时
+		{
+			sec=0;
+			if_timing=1;
+			P1=0xff;
+			while(!s4);
+		}
+	}
+} */
+
+
+
+
+
+
+
+
+
+
+/*3.led向右一次点亮，串口接收字符（波特率为9600），
+“s”时闪烁为200ms，“m”时闪烁为1s，“l”时闪烁为3s*/
+/*#include<reg52.h>
+#include<intrins.h>
+#define u unsigned
+
+u char count=0;	   //对过去50ms的个数进行计数
+u char ch;		  //存储串口接收到的字符
+u char speed=1;	   //闪烁速度
+
+void timer0inti(void)
+{
+ 	EA=1;
+	ET0=1;
+	TR0=1;
+	TMOD|=0x01;
+	TH0=0x4b;
+	TL0=0xfd;
+}
+
+void uartinti(void)
+{
+	EA=1;
+	ES=1;
+	TR1=1;
+	TMOD|=0x20;
+	SM0=0;
+	SM1=1;
+	REN=1;
+	TH1=0xfd;
+	TL1=0xfd;
+}
+
+void main()
+{
+	P1=0x7f;
+	timer0inti();
+	uartinti();
+	while(1);
+}
+
+void timer0() interrupt 1
+{
+	u char store; //存储灯灭前的P1的值
+	TH0=0x4b;    //计时5ms
+	TL0=0xfd;
+	count++;
+
+	if(count==speed)
+	{
+	 	count=0;
+		P1=_cror_(P1,1);	
+		if(P1==0xff)
+			P1=store;
+		else
+		{
+			store=P1;	  //存储的刚好是移位前的P1值，所以不用进行一次闪烁后再移位
+			P1=0xff;
+		}
+	}  
+	
+}
+
+void uart()	interrupt 4
+{
+	RI=0;
+	ch=SBUF;
+	switch(ch){
+		case 's': speed=4;
+				  break;
+		case 'm': speed=20;
+				  break;
+		case 'l': speed=60;
+				  break;
+		default:  speed=1;
+				  break;			  						
+	}
+} */
+
+
+
+
+
+
+/*4.简易计算器，能进行1000以内的加减法（两个数必须都是正整数），不可连续运算，
+按等于键后需归零进行下一次运算，结果大于999时显示小1000的数字，结果小于0时显示其绝对值*/
+/*#include<reg52.h>
+#define u unsigned
+
+sbit DULA=P2^6;
+sbit WELA=P2^7;	   
+
+u int num1,num2; //存储符号前后的两个数字
+int	show_num;	 //展示的数字
+u char count=0;	   //记录50ms的个数
+u char i=0;		  //0，1，2代表个位，十位，百位
+u char mod=0;	  //0为加法，1为减法
+u char num_order=1;	 //按键操作的数字，1为num1，2为num2
+u char dula[]={0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F}; //0,1,2,3,4,5,6,7,8,9
+u char wela[]={0xfe,0xfd,0xfb};
+u char KeyValue;	//键盘输入的值，1~9为输入的数字，10为加1，11为减，12为等于，27为清零
+//  1  2  3  20
+//  4  5  6  23
+//  7  8  9  26
+//  10 11 12 29
+
+void timer0inti(void)
+{
+ 	EA=1;
+	ET0=1;
+	TR0=1;
+	TMOD=0x01;
+	TH0=0xee;
+	TL0=0x01;
+}
+
+void display(u int num)
+{	
+	u char wei;		   //判断数字的位数，分三种情况动态显示数字
+	u char bai=num/100;
+	u char shi=num%100/10;				
+	u char ge=num%10;	
+	
+	if(bai==0)	   //为真时范围为0~99
+	{
+		if(shi==0)	//<9
+			wei=1;
+		else	   //10~99
+	 		wei=2;	
+	}
+	else		 //范围为100~999
+		wei=3;
+	if(i==wei-1)
+		i=0;
+	else
+		i++;
+	P0=0xff;
+	WELA=1;
+	P0=wela[i];
+	WELA=0;
+	
+	P0=0;
+	DULA=1;
+	switch(i){
+		case 0: if(wei==1)
+					P0=dula[ge];
+				else if(wei==2)
+					P0=dula[shi];
+				else 
+					P0=dula[bai];	
+				break;
+		case 1: if(wei==2)
+					P0=dula[ge];
+				else
+					P0=dula[shi];	
+				break;
+		case 2: P0=dula[ge];
+				break;
+	}
+	DULA=0;
+	
+}
+
+void timer0() interrupt 1
+{
+	TH0=0xee;//计时5ms
+	TL0=0x01;
+	display(show_num);
+	if(count==200)	  //时间过去了1s
+		count=0;
+	count++;
+}
+
+void main()
+{
+	timer0inti();
+	while(1)
+	{
+		P3=0xf0;
+		if(P3!=0xf0)
+		{
+			switch(P3)	//列扫描
+			{
+				case 0xe0:	KeyValue = 1;	break;
+				case 0xd0:	KeyValue = 2;	break;
+				case 0xb0:	KeyValue = 3;	break;
+				case 0x70:	KeyValue = 20;	break;
+			}
+			P3 = 0x0f;//行扫描
+			switch(P3)
+			{
+				case 0x0e:	KeyValue = KeyValue;	break;
+				case 0x0d:	KeyValue += 3;	break;
+				case 0x0b:	KeyValue += 6;	break;
+				case 0x07:	KeyValue += 9;	break;
+			}
+			if(KeyValue<10)
+				switch(num_order){
+					case 1:	show_num=num1=10*num1+KeyValue;
+							break;
+					case 2:	show_num=num2=10*num2+KeyValue;
+							break;
+				}
+			else
+				switch(KeyValue){
+					case 10: mod=0;			//加法
+							 num_order=2;	 //输入的数字为第二个数字
+							 show_num=0;	//以初始值为0动态显示第二个数字
+							 break;
+					case 11: mod=1;		   //减法
+							 num_order=2;
+							 show_num=0;
+							 break;
+					case 12: if(mod==0)
+							 {
+							 	show_num=num1+num2;
+							 	if(show_num>999)		//大于999的数减去1000
+							 		show_num=show_num-1000; 
+							 }	
+							 else
+							 {
+							 	show_num=num1-num2;	  
+								if(show_num<0)		 //小于0的数字取相反数
+									show_num=-show_num;	
+							  }
+							 break;
+					case 29: num1=num2=show_num=0;	 //归零
+							 num_order=1;
+							 break;
+				}
+			while(P3 != 0x0f);//松手检测	
+		}
+	}
+}*/ 
+
+
+
+
+
+
+/*倒序输出串口接收到的字符串  失败*/
+/*#include<reg52.h>
+#define u unsigned
+u char str[100];
+u char count=0;
+
+void uartinti(void)
+{
+	EA=1;
+	ES=1;
+	TR1=1;
+	TMOD|=0x20;
+	SM0=0;
+	SM1=1;
+	REN=1;
+	TH1=0xfd;	   //设置波特率为9600
+	TL1=0xfd;
+}
+
+
+
+void uart()	interrupt 4
+{
+
+	if(RI)
+	{
+		RI=0;
+		str[count]=SBUF;
+		count++;
+		
+	}
+	 
+} 
+
+void sendchar(u char ch)
+{
+	SBUF=ch;
+	while(!TI);
+	TI=0;
+}
+
+void sendstring(u char* p)
+{
+ 	while(*p)
+	{
+	 	sendchar(*p);
+		p++;
+	}
+}
+
+void delay(u int z)
+{
+ 	u int x,y;
+	for(x=0;x<z;x++)
+		for(y=0;y<114;y++);
+}
+
+void main()
+{		
+	uartinti();
+	while(1)
+	{
+	
+			str[count]='\0';
+			sendstring(str); 
+	}
+}*/
