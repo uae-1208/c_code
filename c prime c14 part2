@@ -1,0 +1,518 @@
+C prime plus p476
+#include<stdio.h>
+#include<string.h>
+
+typedef enum spectum { red, orange, yellow, green, blue, violet } COLOR;
+
+char* sgets(char* str, int length)
+{
+	char* result = fgets(str, length, stdin);
+	char* find;
+	find = strchr(str, '\n');
+	if (find)
+		*find = '\0';
+	else
+		while (getchar() != '\n');
+	return result;
+}
+
+int main()
+{
+	char* colors[] = { "red","orange","yellow","green","blue","violet" };
+	char choice[10];
+	COLOR color;
+	puts("Enter a color (empty line to quit):");
+	while (sgets(choice,10) != NULL && choice[0] != '\0')
+	{
+		for (color = red; color <= violet; color++)
+			if (strcmp(choice, colors[color]) == 0)
+				break;
+		switch (color) 
+		{
+			case red:puts("Roses are red.");
+				break;
+			case orange:puts("Poppies are orange.");
+				break;
+			case yellow:puts("Sunflowers are yellow.");
+				break;
+			case green:puts("Grass is green.");
+				break;
+			case blue:puts("Bluebells are blue.");
+				break;
+			case violet:puts("Violet are violet.");
+				break;
+			default:printf("I don't konw about the color %s.\n", choice);
+				break;
+		}
+		puts("Next color (empty line to quit):");
+	}
+	puts("Bye!");
+	return 0;
+}
+
+
+P483:
+#include<stdio.h>
+#include<string.h>
+#include<ctype.h>
+
+char showmenu(void)
+{
+	char ans;
+	puts("Enter menu choice:");
+	puts("u) uppercase            l) lowercase");
+	puts("t) transposed case      o) orginal case");
+	puts("n) next string");
+	ans = tolower(getchar());
+	while (getchar() != '\n');
+	while (strchr("ulotn", ans) == NULL)
+	{
+		puts("No such choice! Please reenter:");
+		ans = tolower(getchar());
+		while (getchar() != '\n');
+	}
+	return ans;
+}
+
+char* sgets(char* str, int length)
+{
+	char* result = fgets(str, length, stdin);
+	char* find;
+	find = strchr(str, '\n');
+	if (find)
+		*find = '\0';
+	else
+		while (getchar() != '\n');
+	return result;
+}
+
+void Toupper(char* str)
+{
+	while (*str)
+	{
+		*str = toupper(*str);
+		str++;
+	}
+}
+
+void Tolower(char* str)
+{
+	while (*str)
+	{
+		*str = tolower(*str);
+		str++;
+	}
+}
+
+void Transpose(char* str)
+{
+	while (*str)
+	{
+		if(islower(*str))
+			*str = toupper(*str);
+		else
+			*str = tolower(*str);
+		str++;
+	}
+}
+
+void Dummy(char* str)
+{
+
+}
+
+void DO_it(void (*fp)(char* str),char* string)
+{
+	(*fp)(string);
+	puts(string);
+}
+
+int main()
+{
+	char choice;
+	char str[30];
+	char copy[30];
+	void (*fp)(char* str);
+	puts("Enter a string (empty line to quit):");
+	while (sgets(str, 30) != NULL && str[0] != '\0')
+	{
+		while ((choice = showmenu()) != 'n')
+		{
+			switch (choice)
+			{
+			case 'u':fp = Toupper;
+				break;
+			case 'l':fp = Tolower;
+				break;
+			case 't':fp = Transpose;
+				break;
+			case 'o':fp = Dummy;
+				break;
+			}
+			strcpy(copy, str);
+			DO_it(fp, copy);
+		}
+		puts("Enter a string (empty line to quit):");
+	}
+	puts("Bye!");
+	return 0;
+}
+
+
+14.18
+T2：
+#include<stdio.h>
+
+struct month {
+	char fullname[10];
+	char shortname[4];
+	int days;
+	int monumb;
+};
+struct DATE {
+	int year;
+	int month;
+	int day;
+};
+
+int sum_all_days(struct month* months,struct DATE date)
+{
+	int total_day = 0;
+	int index;
+	if (date.year % 100)
+	{
+		if (date.year % 4 == 0)
+			months[1].days = 29;
+	}
+	else
+		if (date.year % 400 == 0)
+			months[1].days = 29;
+	for (index = 0; index < date.month-1; index++)
+		total_day += months[index].days;
+	total_day += date.day;
+	return  total_day;
+}
+	
+int main()
+{
+	struct DATE date;
+	struct month months[12] =
+	{
+		{"January","Jan",31,1},
+		{"February","Feb",28,2},
+		{"March","Mar",31,3},
+		{"April","Apr",30,4},
+		{"May","May",31,5},
+		{"June","Jun",30,6},
+		{"July","Jul",31,7},
+		{"August","Aug",31,8},
+		{"September","Sep",30,9},
+		{"October","Oct",31,10},
+		{"November","Nov",30,11},
+		{"December","Dec",31,12}
+	};
+	puts("Please enter the date(year month day):");
+	scanf("%d %d %d", &date.year, &date.month, &date.day);
+	printf("There are %d days at all.", sum_all_days(months, date));
+	return 0;
+}
+
+T3：
+#include<stdio.h>
+#include<string.h>
+void sort(char** book)
+{
+	int top, seek;
+	char* temp;
+	for(top=0;top<7-1;top++)
+		for (seek = top; seek < 7; seek++)
+		{
+			if (strcmp(book[top], book[seek]) >0)
+			{
+				temp = book[top];
+				book[top] = book[seek];
+				book[seek] = temp;
+			}
+		}
+}
+
+int main()
+{
+	int i;
+	char* book[7] = { "abcd","asffas","afsas","fsgdsg","sdgasf","dsgad","asfsf" };
+	sort(book);
+	for (i = 0; i < 7; i++)
+		puts(book[i]);
+	return 0;
+}
+
+
+T5：
+#include<stdio.h>
+#define CSIZE 2
+struct name {
+	char fir_name[10];
+	char last_name[10];
+};
+struct student {
+	struct name NAME;
+	float grade[3];
+	float aver_grade;
+};
+
+void get_info(struct student* pstu) 
+{
+	puts("Enter the grades of the students:");
+	scanf("%f %f %f", &pstu->grade[0], &pstu->grade[1], &pstu->grade[2]);
+}
+
+void get_aver_grade(struct student* pstu)
+{
+	pstu->aver_grade = (pstu->grade[0] + pstu->grade[1] + pstu->grade[2]) / 3;
+}
+
+void print_info(struct student* pstu)
+{
+	printf("name: %s %s\n", pstu->NAME.fir_name, pstu->NAME.last_name);
+	printf("grade: %.2f %.2f %.2f\n", pstu->grade[0], pstu->grade[1], pstu->grade[2]);
+	printf("average grade: %.2f\n", pstu->aver_grade);
+}
+
+void print_aver_grade(struct student* pstu)
+{
+	printf("final average grade: %.2f\n", (pstu->aver_grade + (pstu + 1)->aver_grade) / 2);
+}
+
+int main()
+{
+	struct student stu[CSIZE] =
+	{
+		{"Mike","Jordan"},
+		{"Fei","Li"}
+	};
+	int i;
+	for (i = 0; i < CSIZE; i++)
+		get_info(&stu[i]);
+	for (i = 0; i < CSIZE; i++)
+		get_aver_grade(&stu[i]);
+	for (i = 0; i < CSIZE; i++)
+		print_info(&stu[i]);
+	print_aver_grade(stu);
+	return 0;
+}
+
+T6：
+#include<stdio.h>
+#include<string.h>
+struct data {
+	int numb;
+	char name[10];
+	int show_up_count;
+	int hit_count;
+	float hit_divide_show;
+};
+
+int main()
+{
+	/*struct data player[10] =
+	{
+		{5,"Mike",3,7},
+		{1,"Tony",4,6},
+		{3,"Liam",5,9},
+		{2,"Milo",3,9},
+		{4,"Steve",9,18},
+		{5,"Mike",6,5},
+		{6,"Keven",6,8},
+		{1,"Tony",1,6},
+		{4,"Steve",4,6},
+		{5,"Mike",4,9}
+	};
+	FILE* fp;
+	int i;
+	fp = fopen("ak47.txt", "a+b");
+	rewind(fp);
+	fwrite(player, sizeof(struct data), 10, fp);
+	fclose(fp);*/
+	struct data temp;
+	struct data *player[10];
+	int i,j;
+	int count = 0;
+	FILE* fp;
+	fp = fopen("ak47.txt", "a+b"); 
+	rewind(fp);
+	player[0] = (struct data*)malloc(1 * sizeof(struct data));
+	fread(player[0], sizeof(struct data), 1, fp);
+	count++;
+	for (i = 1; i < 10; i++)
+	{
+		fread(&temp, sizeof(struct data), 1, fp);
+		for (j = 0; j < count; j++)
+			if (temp.numb == (player[j])->numb)
+			{
+				player[j]->hit_count += temp.hit_count;
+				player[j]->show_up_count += temp.show_up_count;
+				break;
+			}
+		if (j == count)
+		{
+			player[count] = (struct data*)malloc(1 * sizeof(struct data));
+			*player[count] = temp;
+			count++;
+		}
+	}
+	for (i = 0; i < count; i++)
+		player[i]->hit_divide_show=(float)player[i]->hit_count/player[i]->show_up_count;
+	puts("Nmub  Name   Show_up_count  Hit_count   Hit_divide_show");
+	for (i = 0; i < count; i++)
+		printf("%d     %-10s  %-12d  %-11d  %.2f\n",
+	 player[i]->numb, player[i]->name, player[i]->show_up_count, player[i]->hit_count, player[i]->hit_divide_show);
+	fclose(fp);
+	return 0;		
+}
+
+T8：
+#include<stdio.h>
+#include<stdbool.h>
+#include<string.h>
+struct passen_info {
+	int seat_numb;
+	_Bool if_seat_reserved;
+	char name[10];
+};
+struct SEAT {
+	int numb;
+	_Bool if_seat_reserved;
+};
+
+char show_menu(void)
+{
+	char choice;
+	puts("To choose a function, enter its letter label:");
+	puts("a) Show number of empty seats");
+	puts("b) Show list of empty seats");
+	puts("c) Assign a customer to a seat assignment");
+	puts("d) Delete a seat assignment");
+	puts("e) Quit");
+	scanf("%c", &choice);
+	while (getchar() != '\n');
+	return choice;
+}
+
+void fun_a(struct SEAT* pseat)
+{
+	int i;
+	int count = 0;
+	for (i = 0; i < 12; i++)
+		if (pseat[i].if_seat_reserved == false)
+			count++;
+	printf("%d empty seat(s).\n", count);
+}
+
+void fun_b(struct SEAT* pseat)
+{
+	int i;
+	int count = 0;
+	for (i = 0; i < 12; i++)
+		if (pseat[i].if_seat_reserved == false)
+			printf("Empty seat%d: seat%d.\n", ++count, pseat[i].numb);
+	if (!count)
+		puts("No empty seat!");
+}
+
+void fun_c(struct passen_info* ppass, struct SEAT* pseat, int* pcount)
+{
+	int seat;
+	if (*pcount < 12)
+	{
+		puts("Please enter the name of the passenger:");
+		fgets(ppass[*pcount].name, 10, stdin);
+		puts("Please enter the seat you want to reserve:");
+		scanf("%d", &seat);
+		while (getchar() != '\n');
+		while (seat > 12)
+		{
+			puts("No such seat!");
+			puts("Please choose another seat:");
+			scanf("%d", &seat);
+			while (getchar() != '\n');
+		}
+		while (pseat[seat - 1].if_seat_reserved != false)
+		{
+			puts("Sorry,the seat is reserved.");
+			puts("Please choose another seat:");
+			scanf("%d", &seat);
+			while (getchar() != '\n');
+		}
+		pseat[seat - 1].if_seat_reserved = true;
+		ppass[*pcount].if_seat_reserved = true;
+		ppass[*pcount].seat_numb = seat - 1;
+		puts("Assignment succeed.");
+		(*pcount)++;
+	}
+	else
+		puts("All seats are preserved.");
+}
+
+void fun_d(struct passen_info* ppass, struct SEAT* pseat, int* pcount)
+{
+	int seat,i;
+	char name[10];
+	if (*pcount > 0)
+	{
+		puts("Please enter the name of the passenger:");
+		fgets(name, 10, stdin);
+		for (i = 0; i <= *pcount; i++)
+			if (strcmp(ppass[i].name, name) == 0)
+			{
+				pseat[ppass[i].seat_numb].if_seat_reserved = false;
+				ppass[i].seat_numb = 0;
+				ppass[i].if_seat_reserved = false;
+				strcpy(ppass[i].name, "\0");
+				puts("Deletement succeed.");
+				break;
+			}
+		if (i > * pcount)
+			puts("No such a pasenger.");
+	}
+	else
+		puts("No seat is reserved.");
+}
+
+int main()
+{
+	struct SEAT seat[12] =
+	{
+		{1,false},
+		{2,false},
+		{3,false},
+		{4,false},
+		{5,false},
+		{6,false},
+		{7,false},
+		{8,false},
+		{9,false},
+		{10,false},
+		{11,false},
+		{12,false}
+	};
+	struct passen_info passenger[12];
+	int count=0;
+	char choice;
+	while ((choice = show_menu()) != 'e')
+	{
+		switch (choice)
+		{
+		case 'a':fun_a(seat);
+			break;
+		case 'b':fun_b(seat);
+			break;
+		case 'c':fun_c(passenger, seat, &count);
+			break;
+		case 'd':fun_d(passenger, seat, &count);
+			break;
+		}
+		puts(" ");
+	}
+	puts("Bye!");
+	return 0;
+}
