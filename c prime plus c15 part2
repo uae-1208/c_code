@@ -1,0 +1,214 @@
+C primer plus p518
+T1：
+#include<stdio.h>
+#include<string.h>
+
+int main()
+{
+	char bin[] = "10111101101";
+	char* pbin = bin;
+	int bit = strlen(pbin);
+	int i;
+	int num = 0;
+	int bit_num;
+	for (i = 0; i < bit; i++)
+	{
+		if(i>0)
+			num <<= 1;
+		bit_num = *pbin++ - '0';
+		num |= bit_num;
+	}
+	printf("%d\n", num);
+	return 0;
+}
+
+T5:
+#include<stdio.h>
+#include<string.h>
+void itob(unsigned int num, char* pbin)			//产生num的二进制字符串数组
+{
+	int size = 8 * sizeof(unsigned int);
+	int i;
+	int mask = 0x01;
+	for (i = size - 1; i >= 0; i--)
+	{
+		pbin[i] = (num & mask) + '0';
+		num >>= 1;
+	}
+	pbin[size] = '\0';
+}
+
+void show_pbin(char* pbin)				//打印二进制字符串
+{
+	int i = 0;
+	while (pbin[i])
+	{
+		putchar(pbin[i]);
+		i++;
+		if (i % 4 == 0)
+			putchar(' ');
+	}
+	putchar('\n');
+}
+
+//602486210向左移动13位
+int creat_bit(int count)			//产生0000 0000 0000 0000 0001 1111 1111 1111
+{
+	int num = 0;
+	int i;
+	for (i = 0; i < count; i++)
+	{
+		num <<= 1;
+		num |= 1;
+	}
+	return num;
+}
+
+int rotate(int num, int count)
+{
+	int mask = creat_bit(count);
+	int size = 8 * sizeof(unsigned int);
+	int store;
+	mask <<= size - count;      //mask=1111 1111 1111 1111 1000 0000 0000 0000
+	store = mask & num;         //store存储num的前13位（该13位在num移动中将消失）
+	store >>= size - count;		//store向右移动，num的前13位保存在store的后13位
+	store &= creat_bit(count);	//若store的最高位为1，移动时前面高位补1,所以要把补1的位改为0
+	num <<= count;				//num左移13位
+	num |= store;				//num的低13位被存储在store中的替换
+	return num;
+}
+
+int main()
+{
+	char pbin[8 * sizeof(unsigned int) + 1];
+	itob(rotate(602486210,13), pbin);
+	show_pbin(pbin);
+	return 0;
+}
+
+T6:
+#include<stdio.h>
+#include<string.h>
+#include<stdbool.h>
+#define off false
+#define on true
+#define left 0
+#define center 1
+#define right 2
+struct word_info {
+	unsigned int id : 8;
+	unsigned int size : 7;
+	unsigned int : 1;
+	unsigned int alignment : 2;
+	bool bold : 1;
+	bool italic : 1;
+	bool underline : 1;
+	unsigned int : 3;
+};
+
+char show_menu(struct word_info* pword)
+{
+	char choice;
+	puts("ID SIZE ALIGANMENT   B   I   U");
+	printf("%2d %4d    ", pword->id, pword->size);
+	switch (pword->alignment)
+	{
+	case 0:printf("%s", "left");
+		break;
+	case 1:printf("%s", "center");
+		break;
+	case 2:printf("%s", "right");
+		break;
+	}
+	printf("     %s %s %s\n", pword->bold ? "on" : "off", pword->italic ? "on" : "off", pword->underline ? "on" : "off");
+	puts(" ");
+	puts("f)change font   s)change size    a)change alignmet");
+	puts("b)toggle bold   i)toggle italic  u)toggle underline");
+	puts("q)quit");
+	scanf("%c", &choice);
+	while (getchar()!='\n');
+	return choice;
+}
+
+void modify_id(struct word_info* pword)
+{
+	int num;
+	puts("Enter font id(0-255):");
+	scanf("%d", &num);
+	while (getchar() != '\n');
+	pword->id = num;
+	puts(" ");
+}
+
+void modify_size(struct word_info* pword)
+{
+	int num;
+	puts("Enter font size(0-127):");
+	scanf("%d", &num);
+	while (getchar() != '\n');
+	pword->size = num;
+	puts(" ");
+}
+
+void modify_alignment(struct word_info* pword)
+{
+	char choice;
+	puts("Select alignment:");
+	puts("l)left   c)center   r)right");
+	scanf("%c", &choice);
+	while (getchar() != '\n');
+	switch (choice)
+	{
+	case 'l':pword->alignment = left;
+		break;
+	case 'c':pword->alignment = center;
+		break;
+	case 'r':pword->alignment = right;
+		break;
+	}
+	puts(" ");
+}
+
+void modify_bold(struct word_info* pword)
+{
+	pword->bold= ~pword->bold;
+	puts(" ");
+}
+
+void modify_italic(struct word_info* pword)
+{
+	pword->italic = ~pword->italic;
+	puts(" ");
+}
+
+void modify_underline(struct word_info* pword)
+{
+	pword->underline = ~pword->underline;
+	puts(" ");
+}
+
+int main()
+{
+	struct word_info word = { 1,12,left,off,off,off };
+	char choice;
+	while ((choice = show_menu(&word)) != 'q')
+	{
+		switch (choice)
+		{
+		case 'f':modify_id(&word);
+			break;
+		case 's':modify_size(&word);
+			break;
+		case 'a':modify_alignment(&word);
+			break;
+		case 'b':modify_bold(&word);
+			break;
+		case 'i':modify_italic(&word);
+			break;
+		case 'u':modify_underline(&word);
+			break;
+		}
+	}
+	puts("Bye!");
+	return 0;
+}
