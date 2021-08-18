@@ -1,0 +1,140 @@
+#include<stdio.h>
+#include<stdbool.h>
+
+/*1周的7天*/
+enum WEEK { sun, mon, tue, wed, thu, fri, sat };
+/*12月份*/
+enum MONTH { jan = 1, feb, mar, apr, may, jun, jul, aug, sept, oct, nov, dec };
+/*12个月的天数*/
+unsigned char month_day[] = { 0,31,28,31,30,31,30,31,31,30,31,30,31 };
+
+struct check {
+	int year;
+	unsigned char month;
+}check_date;
+struct Date {
+	int year;
+	unsigned char month;
+	unsigned char day;
+	enum WEEK Week;
+};
+const struct Date base = { 2021,8,16,mon };
+
+/*判断是否为闰年*/
+bool check_leap(int year_checked)   
+{
+	if (year_checked % 4)
+		return false;
+	else
+	{
+		if (year_checked % 100)
+			return true;
+		else
+			return year_checked % 400 ? false : true;
+	}
+}
+/*计算目标月份的1号距离2021.8.16的天数*/
+int sum_day(struct check date)
+{
+	int days = 0;
+	enum MONTH month = date.month;
+	int year = date.year;
+	int circle = 0;
+	while (year != base.year)
+	{
+		if (year < base.year)
+		{
+			for (; month <= dec; month++)
+			{
+				days += month_day[month];
+				if (month == feb && check_leap(year))				//为闰年二月的天数加一
+					days++;
+			}
+			year++;
+			month = jan;
+		}
+		else if(year > base.year)
+		{
+			for (; month - 1 >= jan; month--)
+			{
+				days += month_day[month - 1];
+				if (month == feb && check_leap(year))				//为闰年二月的天数加一
+					days++;
+			}
+			year--;
+			days += month_day[jan];
+			month = dec;
+		}
+		circle = 1;
+	}
+	if (!circle)
+		month = date.month;
+	if (month <= base.month)
+	{
+		for (; month < base.month; month++)
+		{
+			days += month_day[month];
+			if (month == feb && check_leap(year))				//为闰年二月的天数加一
+				days++;
+		}
+		days += (base.day - 1);
+	}
+	else if (month > base.month)
+	{
+		for (; month - 1 > base.month; month--)
+		{
+			days += month_day[month - 1];
+			if (month == feb && check_leap(year))				//为闰年二月的天数加一
+				days++;
+		}
+		days += (month_day[base.month] - base.day + 1);
+	}
+	return days;
+}
+/*判断目标月份的1号是星期几*/
+enum WEEK judge_week(struct check date)
+{
+	enum WEEK result;
+	int alldays = sum_day(date);
+	alldays %= 7;					
+	if (date.year < base.year)
+		result = base.Week - (alldays <= (base.Week - sun) ? alldays : alldays - 7);
+	else if (date.year > base.year)
+		result = base.Week + (alldays <= (sat - base.Week) ? alldays : alldays - 7);
+	else
+	{
+		if (date.month <= base.month)
+			result = base.Week - (alldays <= (base.Week - sun) ? alldays : alldays - 7);
+		else 
+			result = base.Week + (alldays <= (sat - base.Week) ? alldays : alldays - 7);
+	}
+	return result;
+}
+
+void show_lunar(struct check date)
+{
+	int i,j;
+	i = judge_week(date);
+	printf("LUNAR:        %d.%d\n", date.year, date.month);
+	puts("**********************************");
+	printf("SUN  MON  TUE  WEN  THU  FRI  STA\n");
+		for (j = 0; j < i; j++)
+			printf("     ");
+	for (j = 1; j <= month_day[date.month]; j++,i++)
+	{
+		if (i % 7 == 0 && i != 0)
+			putchar('\n');
+		printf("%2d   ", j);
+	}
+	putchar('\n');
+	puts("**********************************");
+}
+
+
+int main()
+{
+	check_date.year = 2021;
+	check_date.month = 8;
+	show_lunar(check_date);
+	return 0;
+}
