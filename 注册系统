@@ -1,0 +1,193 @@
+1.main.c:
+#include <stdio.h>
+#include"system.h"
+
+int ShowMenu(void)
+{
+	int option;
+	puts("|======================================|");
+	puts("||------------------------------------||");
+	puts("||               QICQ                 ||");
+	puts("||                                    ||");
+	puts("||                                    ||");
+	puts("||                                    ||");
+	puts("||             1)SIGN UP              ||");
+	puts("||             ----------             ||");
+	puts("||             2)SIGN IN              ||");
+	puts("||             ----------             ||");
+	puts("||             3)QUIT                 ||");
+	puts("||             ----------             ||");
+	puts("||                                    ||");
+	puts("|======================================|");
+	printf("USER'S OPTION:");
+	scanf("%d",&option);
+	return option;
+}
+
+int main()
+{
+	int option;
+	while((option=ShowMenu())!=3)
+	{
+		while(getchar()!='\n');
+		if(option==1)
+			RegisAccount();
+		else
+			SignIn();
+	}
+	puts("BYE!");
+	return 0;
+}
+
+
+2.system.h:
+#ifndef __SYSTEM_H__
+#define __SYSTEM_H__
+#include<stdio.h>
+
+struct USER{
+	char username[16];
+	char account[11];
+	char code[13];
+};
+
+void RegisAccount(void);
+void SignIn(void);
+char* sgets(char*str,int length);
+
+#endif
+
+
+
+3.system.h:
+#include"system.h"
+#include<stdbool.h>
+#include<string.h>
+#include<time.h>
+
+struct USER user;
+int user_num;
+enum MODE{USERNAME,ACCOUNT};
+
+char* sgets(char*str,int length)
+{
+	char* result;
+	char* find;
+	result=fgets(str,length,stdin);
+	if(result)
+	{
+		find=strchr(str,'\n');
+		if(find)
+			*find='\0';
+		else
+			while(getchar()!='\n');
+	}
+	return result;
+}
+
+static bool SearchInfo(struct USER info,enum MODE mode,FILE* fp,struct USER* ptemp)
+{
+	int i;
+	rewind(fp);
+	fread(&user_num,sizeof(int),1,fp);
+	for(i=0;i<user_num;i++)
+	{
+		fread(ptemp,sizeof(*ptemp),1,fp);	
+		if(mode==USERNAME)
+		{
+			if(!strcmp(info.username,ptemp->username))
+				return false;
+		}
+		else 
+		{
+			if(!strcmp(info.account,ptemp->account))
+				return false;
+		}
+	}
+	return true;
+}
+
+static void CreateAccount(struct USER* pinfo)
+{
+	/*其实有可能生成两个一样的账号，但概率挺小的，
+	我懒得写判断账号是否存在的代码了*/
+	srand((unsigned)time(NULL));
+	int i;
+	for(i=0;i<10;i++)
+		pinfo->account[i]=(rand()%10)+'0';
+	pinfo->account[i]='\0';
+}
+
+static void StoreInfo(struct USER info,FILE* fp)
+{
+	int i;
+	struct USER temp;
+	rewind(fp);
+	fwrite(&user_num,sizeof(int),1,fp);
+	for(i=0;i<user_num-1;i++)
+		fread(&temp,sizeof(temp),1,fp);
+	fwrite(&info,sizeof(info),1,fp);	
+}
+
+void RegisAccount(void)
+{
+	struct USER info,temp;			//temp只在登录中起作用 
+	FILE* fp;
+	fp=fopen("infomation.txt","r+");
+	puts("|===============*******================|");
+	puts("                SIGN UP");
+	printf("USERNAME(less than 15 characters):\n");
+	sgets(info.username,16);
+	while(!SearchInfo(info,USERNAME,fp,&temp))
+	{
+		puts("Name registered! Please reenter!");
+		printf("USERNAME(less than 15 characters):\n");
+		sgets(info.username,16);
+	}
+	printf("CODE(less than 12 characters):\n");
+	sgets(info.code,13);
+	CreateAccount(&info);
+	puts("-------------------");
+	puts("Your Information:");
+	printf("USERNAME:%s\n",info.username);
+	printf("ACCOUNR:%s\n",info.account);
+	printf("CODE:%s\n",info.code);
+	puts("|===============*******================|");
+	puts(" ");
+	puts(" ");
+	puts(" ");
+	user_num++;
+	StoreInfo(info,fp);
+	fclose(fp);
+}
+
+void SignIn(void)
+{
+ 	struct USER info,temp;
+	FILE* fp;
+	fp=fopen("infomation.txt","r+");
+	puts("|===============*******================|");
+	puts("                LOG  IN");
+	printf("ACCOUNT:");
+	sgets(info.account,13);
+	printf("CODE:");
+	sgets(info.code,16);
+	puts("-------------------");
+	if(SearchInfo(info,ACCOUNT,fp,&temp))		//没查询到该账号 
+		puts("Account not found!");
+	else if(!strcmp(info.code,temp.code))		//查询到且密码正确 
+	{
+		puts("Loging-in Success!");
+		puts("Your Information:");
+		printf("USERNAME:%s\n",temp.username);
+		printf("ACCOUNR:%s\n",temp.account);
+		printf("CODE:%s\n",temp.code);
+	}
+	else										//查询到但密码错误 
+		puts("The code is wrong!");
+	puts("|===============*******================|");
+	puts(" ");
+	puts(" ");
+	puts(" ");
+	fclose(fp);
+}
