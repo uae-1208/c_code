@@ -1,0 +1,361 @@
+--------------------------------------------------
+main：
+#include "stm32f4xx.h"
+#include "usart.h"
+#include "motor.h"
+#include "tim.h"
+
+
+int main(void)
+{
+	extern enum State{busy,free} state;
+	extern enum Order{forward,backward,left,right,stop} order;
+
+	HC06_Config();	
+	MOTOR_Config();	
+	TIM3_Init();
+
+  	while(1) 
+	{
+		 if(busy)            //½ÓÊÕµ½ÃüÁî²¢ÇÒ¸ÃÖ´ÐÐ
+		 {
+			 switch(order)
+			 {
+				 case forward:	FORWARD_MOVE();
+								break;
+				 case backward:	BACKWARD_MOVE();
+				 				break;
+				 case left:	LEFT_TURNING();
+				 				break;
+				 case right: RIGHT_TURNING();
+				 				break;
+				 case stop: STOP_MOVE();
+				 				break;
+			 }
+			 state = free;       //Ö´ÐÐÍê³É
+		 }  
+	}  
+}
+
+--------------------------------------------------------
+--------------------------------------------------------
+
+#ifndef __USART_H__
+#define	__USART_H__
+
+#include "stm32f4xx.h"
+#include <stdio.h>
+
+void HC06_Config(void);
+int fputc(int ch, FILE *f);
+
+
+#endif
+
+----------------------------------------------------------
+
+#include "usart.h"
+                                                                        
+/*´®¿ÚÊÕµ½µÄÃüÁî*/
+enum Order{forward,backward,left,right,stop} order;   
+/*Ð¡³µ×´Ì¬:busyÎªÒÑÊÕµ½ÃüÁî²¢¼´½«»òÕýÔÚÖ´ÐÐ£»freeÎªÎªÊÕµ½ÃüÁî»òÒÑÖ´ÐÐÍêÃüÁî*/
+enum State{busy,free} state;  
+
+void  USART2_IRQHandler(void)
+{
+	if(USART_GetITStatus(USART2, USART_IT_RXNE ) != RESET)
+	{			
+		order = USART_ReceiveData(USART2);           //½ÓÊÕÃüÁî
+		state = busy;                                //ÈÃÐ¡³µÖ´ÐÐÃüÁî
+	}  
+}
+
+
+int fputc(int ch, FILE *f)
+{
+	USART_SendData(USART2, (uint8_t) ch);
+	
+	while (USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET);		
+
+	return (ch);
+}
+
+static void USART_NVIC_Configuration(void)
+{
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
+	
+	NVIC_InitTypeDef NVIC_InitStructure;
+	NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_Init(&NVIC_InitStructure);
+}
+
+
+static void USART_GPIO_Configuration(void)
+{
+	GPIO_InitTypeDef GPIO_InitStructure;
+	
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA,ENABLE);
+	
+	GPIO_PinAFConfig(GPIOA,GPIO_PinSource2,GPIO_AF_USART2); //GPIOA2¸´ÓÃÎªUSART2
+	GPIO_PinAFConfig(GPIOA,GPIO_PinSource3,GPIO_AF_USART2); //GPIOA3¸´ÓÃÎªUSART2
+	
+	//USART2¶Ë¿ÚÅäÖÃ
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2 | GPIO_Pin_3; //GPIOA2ÓëGPIOA3
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;//¸´ÓÃ¹¦ÄÜ
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;	//ËÙ¶È50MHz
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP; //ÍÆÍì¸´ÓÃÊä³ö
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP; //ÉÏÀ­
+	GPIO_Init(GPIOA,&GPIO_InitStructure); //³õÊ¼»¯PA2£¬PA3
+}
+
+
+void HC06_Config(void)
+{
+	USART_InitTypeDef USART_InitStructure;
+	
+	USART_GPIO_Configuration();
+	USART_NVIC_Configuration();
+		
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
+			
+	//USART2 ³õÊ¼»¯ÉèÖÃ
+	USART_InitStructure.USART_BaudRate = 115200;//²¨ÌØÂÊÉèÖÃ
+	USART_InitStructure.USART_WordLength = USART_WordLength_8b;//×Ö³¤Îª8Î»Êý¾Ý¸ñÊ½
+	USART_InitStructure.USART_StopBits = USART_StopBits_1;//Ò»¸öÍ£Ö¹Î»
+	USART_InitStructure.USART_Parity = USART_Parity_No;//ÎÞÆæÅ¼Ð£ÑéÎ»
+	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;//ÎÞÓ²¼þÊý¾ÝÁ÷¿ØÖÆ
+	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;	//ÊÕ·¢Ä£Ê½
+	USART_Init(USART2, &USART_InitStructure); //³õÊ¼»¯´®¿Ú2
+	
+	USART_Cmd(USART2, ENABLE);  //Ê¹ÄÜ´®¿Ú1 
+	
+	USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);//¿ªÆôÏà¹ØÖÐ¶Ï
+}
+
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+#ifndef __MORTOR_H__
+#define	__MORTOR_H__
+
+#include "stm32f4xx.h"
+
+
+void MOTOR_Config(void);
+void FORWARD_MOVE(void);
+void BACKWARD_MOVE(void);
+void LEFT_TURNING(void);
+void RIGHT_TURNING(void);
+
+void STOP_MOVE(void);
+
+
+#endif
+---------------------------------------------------------------------------
+#include "stm32f4xx.h"
+#include "motor.h"
+
+static void MOTOR_GPIO_Configuration(void)                 
+{
+	//E3¡¢E5wheel3      E4¡¢E6wheel4         B7¡¢B9wheel2          B6¡¢B8wheel1
+	RCC_AHB1PeriphClockCmd (RCC_AHB1Periph_GPIOB, ENABLE);    //µç»ú×ª¶¯·½Ïò¿ØÖÆpin¿Ú£º
+	RCC_AHB1PeriphClockCmd (RCC_AHB1Periph_GPIOE, ENABLE);    //PB6-PB9£¬PE3-PE6
+	
+	GPIO_InitTypeDef GPIO_InitStructure;													   
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9;	
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;   
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;  
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz; 
+	GPIO_Init(GPIOB, &GPIO_InitStructure);	
+
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6;	
+	GPIO_Init(GPIOE, &GPIO_InitStructure);		
+}
+
+
+void MOTOR_Config(void)                              //µç»úÅäÖÃ
+{
+	MOTOR_GPIO_Configuration();
+}
+
+enum Wheel{wheel1,wheel2,wheel3,wheel4};              //ÂÖ×Ó±àºÅ
+                                            
+static void WHEEL_BACKWARD_MOVE(enum Wheel wheel)           //µ¥¸öÂÖ×ÓÏÈºó×ª
+{
+	 switch(wheel)
+	{
+		case wheel1:GPIO_WriteBit(GPIOB,GPIO_Pin_8,Bit_SET);
+					GPIO_WriteBit(GPIOB,GPIO_Pin_6,Bit_RESET);
+					break;
+		case wheel2:GPIO_WriteBit(GPIOB,GPIO_Pin_7,Bit_SET);
+					GPIO_WriteBit(GPIOB,GPIO_Pin_9,Bit_RESET);
+					break;
+		case wheel3:GPIO_WriteBit(GPIOE,GPIO_Pin_5,Bit_SET);
+					GPIO_WriteBit(GPIOE,GPIO_Pin_3,Bit_RESET);
+					break;
+		case wheel4:GPIO_WriteBit(GPIOE,GPIO_Pin_6,Bit_SET);
+					GPIO_WriteBit(GPIOE,GPIO_Pin_4,Bit_RESET);
+					break;
+	}	 
+}
+
+
+static void WHEEL_FORWARD_MOVE(enum Wheel wheel)              //µ¥¸öÂÖ×ÓÏòÇ°×ª
+{
+	 switch(wheel)
+	{
+		case wheel1:GPIO_WriteBit(GPIOB,GPIO_Pin_6,Bit_SET);
+					GPIO_WriteBit(GPIOB,GPIO_Pin_8,Bit_RESET);
+					break;
+		case wheel2:GPIO_WriteBit(GPIOB,GPIO_Pin_9,Bit_SET);
+					GPIO_WriteBit(GPIOB,GPIO_Pin_7,Bit_RESET);
+					break;
+		case wheel3:GPIO_WriteBit(GPIOE,GPIO_Pin_3,Bit_SET);
+					GPIO_WriteBit(GPIOE,GPIO_Pin_5,Bit_RESET);
+					break;
+		case wheel4:GPIO_WriteBit(GPIOE,GPIO_Pin_4,Bit_SET);
+					GPIO_WriteBit(GPIOE,GPIO_Pin_6,Bit_RESET);
+					break;
+	}	 
+}
+
+
+static void MOTIVE_MOVE(void)                          //´ò¿ªL298NÊ¹ÄÜ¶Ë
+{
+	TIM_SetCompare1(TIM3,1000);
+	TIM_SetCompare2(TIM3,1000);
+	TIM_SetCompare3(TIM3,1000);
+	TIM_SetCompare4(TIM3,1000);
+}
+
+                                                       //¹Ø±ÕL298NÊ¹ÄÜ¶Ë£¬Ð¡³µÒ²Í£Ö¹ÔË¶¯
+void STOP_MOVE(void)
+{
+	TIM_SetCompare1(TIM3,0);
+	TIM_SetCompare2(TIM3,0);
+	TIM_SetCompare3(TIM3,0);
+	TIM_SetCompare4(TIM3,0);
+}
+
+void FORWARD_MOVE(void)                                       //Ð¡³µÏòÇ°ÒÆ¶¯
+{
+	MOTIVE_MOVE();
+	WHEEL_FORWARD_MOVE(wheel1);
+	WHEEL_FORWARD_MOVE(wheel2);
+	WHEEL_FORWARD_MOVE(wheel3);
+	WHEEL_FORWARD_MOVE(wheel4);
+}	
+
+
+void BACKWARD_MOVE(void)                                  //Ð¡³µÏòºóÒÆ¶¯
+{
+	MOTIVE_MOVE();
+	WHEEL_BACKWARD_MOVE(wheel1);
+	WHEEL_BACKWARD_MOVE(wheel2);
+	WHEEL_BACKWARD_MOVE(wheel3);
+	WHEEL_BACKWARD_MOVE(wheel4);
+}
+
+
+void LEFT_TURNING(void)                                      //Ð¡³µ×ó×ª
+{
+	MOTIVE_MOVE();
+	WHEEL_BACKWARD_MOVE(wheel1);
+	WHEEL_BACKWARD_MOVE(wheel2);
+	WHEEL_FORWARD_MOVE(wheel3);
+	WHEEL_FORWARD_MOVE(wheel4);
+}
+
+
+
+void RIGHT_TURNING(void)									//Ð¡³µÓÒ×ª
+{
+	MOTIVE_MOVE();
+	WHEEL_BACKWARD_MOVE(wheel3);
+	WHEEL_BACKWARD_MOVE(wheel4);
+	WHEEL_FORWARD_MOVE(wheel1);
+	WHEEL_FORWARD_MOVE(wheel2);
+}
+---------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------
+#ifndef __TIM_H__
+#define __TIM_H__
+
+#include "stm32f4xx.h"
+void TIM3_Init(void);
+
+
+#endif
+-----------------------------------------------------------------------------------------
+#include "tim.h"
+
+static void TIM_GPIO_Init(void)
+{
+	GPIO_InitTypeDef GPIO_InitStructure;
+	
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE); 	//PB0¡¢PB1¡¢PA6¡¢PA7
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE); 
+		
+	GPIO_PinAFConfig(GPIOA,GPIO_PinSource6,GPIO_AF_TIM3); //GPIOA6¸´ÓÃÎª¶¨Ê±Æ÷3
+	GPIO_PinAFConfig(GPIOA,GPIO_PinSource7,GPIO_AF_TIM3); //GPIOA7¸´ÓÃÎª¶¨Ê±Æ÷3
+	GPIO_PinAFConfig(GPIOB,GPIO_PinSource0,GPIO_AF_TIM3); //GPIOB0¸´ÓÃÎª¶¨Ê±Æ÷3
+	GPIO_PinAFConfig(GPIOB,GPIO_PinSource1,GPIO_AF_TIM3); //GPIOB1¸´ÓÃÎª¶¨Ê±Æ÷3
+
+	
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6|GPIO_Pin_7;           //PA6¡¢PA7
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;        //¸´ÓÃ¹¦ÄÜ
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;	//ËÙ¶È100MHz
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;      //ÍÆÍì¸´ÓÃÊä³ö
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;        //ÉÏÀ­
+	GPIO_Init(GPIOA,&GPIO_InitStructure);              	
+
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0|GPIO_Pin_1;            //PB0¡¢PB1
+	GPIO_Init(GPIOB,&GPIO_InitStructure);             
+}
+
+static void TIM3_Mode_Init(void)
+{		 					 
+	
+	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+	TIM_OCInitTypeDef  TIM_OCInitStructure;
+	
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3,ENABLE);  	//TIM3Ê±ÖÓÊ¹ÄÜ    
+	 
+	TIM_TimeBaseStructure.TIM_Prescaler=180-1;  //¶¨Ê±Æ÷·ÖÆµ
+	TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up; //ÏòÉÏ¼ÆÊýÄ£Ê½
+	TIM_TimeBaseStructure.TIM_Period=1000-1;   //×Ô¶¯ÖØ×°ÔØÖµ
+	TIM_TimeBaseStructure.TIM_ClockDivision=TIM_CKD_DIV1; 
+	
+	TIM_TimeBaseInit(TIM3,&TIM_TimeBaseStructure);//³õÊ¼»¯¶¨Ê±Æ÷3
+	
+	//³õÊ¼»¯TIM3 PWMÄ£Ê½	 
+	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1; //Ñ¡Ôñ¶¨Ê±Æ÷Ä£Ê½:TIMÂö³å¿í¶Èµ÷ÖÆÄ£Ê½1
+ 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable; //±È½ÏÊä³öÊ¹ÄÜ
+	TIM_OCInitStructure.TIM_Pulse=1000;
+	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High; //Êä³ö¼«ÐÔ:¸ßµçÆ½ÓÐÐ§
+	TIM_OC4Init(TIM3, &TIM_OCInitStructure);
+	TIM_OC3Init(TIM3, &TIM_OCInitStructure);
+	TIM_OC2Init(TIM3, &TIM_OCInitStructure);
+	TIM_OC1Init(TIM3, &TIM_OCInitStructure);	
+
+	TIM_OC4PreloadConfig(TIM3, TIM_OCPreload_Disable);  //¹Ø±ÕTIM3ÔÚCCR4ÉÏµÄÔ¤×°ÔØ¼Ä´æÆ÷
+	TIM_OC3PreloadConfig(TIM3, TIM_OCPreload_Disable);  //CCR3
+	TIM_OC2PreloadConfig(TIM3, TIM_OCPreload_Disable);  //CCR2 
+	TIM_OC1PreloadConfig(TIM3, TIM_OCPreload_Disable);  //CCR1
+	TIM_ARRPreloadConfig(TIM3,DISABLE);					//¹Ø±ÕARPE
+	
+	TIM_Cmd(TIM3, ENABLE);  //Ê¹ÄÜTIM3									  
+}  
+
+void TIM3_Init(void)	
+{
+	TIM_GPIO_Init();
+	TIM3_Mode_Init();
+}
+
+
+
+
