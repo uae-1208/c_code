@@ -1,2 +1,2 @@
 # c_code
-code for c newhand
+code for c study
